@@ -23,3 +23,5 @@ Backend for an open-source NFT marketplace
 |                     |                           |                     |
 
 ## Entities Model
+
+![EntityModelsDiagram](http://www.plantuml.com/plantuml/svg/5SrD3i8W40RGlQVG0y3iNRMBcfY8QL8z0C8eH7wQuIF6ssjNR_c61YleEUqEiRZKFNT9-m2ixKWazgDV4Q4_UcDnjO0BjAkPxlwYfdbHItrY51V8VA-dctb3ZVEPicrWeQaW8d8prNFIwxOCNFpV7m00?v0)
