@@ -1,0 +1,61 @@
+@startuml
+class User{
+  username : String
+  password : String
+  email : String
+  name : String
+  lastname : String
+  balance: BigDecimal
+}
+
+class NFT {
+  title: String
+  description: String
+  keywords: List<String>
+  category: String
+  mediaType: String
+  content: String
+}
+
+class Settings {
+  currency: String
+  darkMode: Boolean
+}
+
+class Offer {
+  dateTime: DateTime
+}
+
+class FixedPriceOffer extends Offer {
+  price: BigDecimal
+}
+
+class DecliningPriceOffer extends Offer {
+  startingPrice: BigDecimal
+  endingPrice: BigDecimal
+  expiration: DateTime
+}
+
+class HighestBidOffer extends Offer {
+  minimumBid: BigDecimal
+  reservePrice: BigDecimal
+  expiration: DateTime
+}
+
+class Bid {
+  dateTime: DateTime
+  price: BigDecimal
+}
+
+class Sale {
+  dateTime: DateTime
+}
+
+User "1" --right-- "*" NFT : owner <
+User "*" -- "*" NFT : favorites >
+User "1" -- "*" Bid : bidder <
+User "1" --left-- "1" Settings 
+NFT "1" -- "0..1" Offer
+Offer "1" -- "*" Bid : for <
+Bid "1" -- "0..1" Sale
+@enduml
