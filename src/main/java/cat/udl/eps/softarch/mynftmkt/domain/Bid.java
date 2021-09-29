@@ -19,4 +19,5 @@ public class Bid extends UriEntity<Long> {
     private Long id;
     private ZonedDateTime dataTime;
     private BigDecimal price;
+    //TODO NFT which is related to this bid
 }
