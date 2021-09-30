@@ -14,10 +14,13 @@ import java.time.ZonedDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Bid extends UriEntity<Long> {
-    @Id
+
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     private Long id;
-    private ZonedDateTime dataTime;
+
+    private ZonedDateTime dateTime;
+
     private BigDecimal price;
     //TODO NFT which is related to this bid
 }

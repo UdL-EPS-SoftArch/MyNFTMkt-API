@@ -8,10 +8,7 @@ Feature: Modify a Bid
     And There is an NFT offer with an id of "1"
     And There is a bid made for the NFT offer with an id of "1"
 
-    Scenario: Cancel a bid
-      Given I login as "user1" with password "password"
-      When I cancel the bid with an id of "1" for the NFT offer with an id of "1"
-      Then The response code is 201
-      And The bid with an id of "1" for the NFT offer with an id of "1" no longer exists on the DB
+    #TODO Scenarios: forbid user from deleting bids (can only change status to cancelled), change status
 
-      #TODO Modify price?
+
+
