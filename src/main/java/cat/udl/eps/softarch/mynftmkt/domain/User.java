@@ -35,10 +35,8 @@ public class User extends UriEntity<String> implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     private String lastname;
 
     private BigDecimal balance;
