@@ -55,14 +55,15 @@ public class ModifyUserStepDefs {
     @When("I modify the name of the user {string} with {string}")
     public void iModifyTheNameOfTheUserWith(String username, String name) throws Exception {
         if (userRepository.existsById(username)) {
-            User user = new User();
-            user.setName(name);
+            JSONObject newname = new JSONObject();
+            newname.put("name", name);
             stepDefs.result = stepDefs.mockMvc.perform(
                     // patch better than put to update only one field
                     patch("/users/{username}", username)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(String.valueOf(new JSONObject(stepDefs.mapper.writeValueAsString(user))))
-                            .with(AuthenticationStepDefs.authenticate()));
+                            .content(newname.toString())
+                            .with(AuthenticationStepDefs.authenticate()))
+                    .andDo(print());
         }
     }
 
