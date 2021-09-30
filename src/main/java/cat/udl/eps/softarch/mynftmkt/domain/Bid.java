@@ -22,5 +22,14 @@ public class Bid extends UriEntity<Long> {
     private ZonedDateTime dateTime;
 
     private BigDecimal price;
-    //TODO NFT which is related to this bid
+
+    public enum StatusTypes {ACTIVE, PURCHASED, CANCELLED}
+
+    private StatusTypes status;
+
+    /*@ManyToOne
+    private Offer NFTOffer;
+
+    @ManyToOne
+    private User createdBy;*/
 }
