@@ -7,6 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ModifyUserStepDefs {
     final StepDefs stepDefs;
     final UserRepository userRepository;
+    public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     ModifyUserStepDefs(StepDefs stepDefs, UserRepository userRepository) {
         this.stepDefs = stepDefs;
@@ -37,16 +40,16 @@ public class ModifyUserStepDefs {
     }
 
     @When("I modify the password of the user {string} with {string}")
-    public void iModifyThePasswordOfTheUserWith(String username1, String password1) throws Exception {
-        if(userRepository.existsById(username1)){
-            User user = new User();
-            user.setPassword(password1);
-            user.encodePassword();
+    public void iModifyThePasswordOfTheUserWith(String username, String password) throws Exception {
+        if(userRepository.existsById(username)){
+            String passwordEncoded = passwordEncoder.encode(password);
+            JSONObject newPassword = new JSONObject();
+            newPassword.put("password", passwordEncoded);
             stepDefs.result = stepDefs.mockMvc.perform(
                     // patch better than put to update only one field
-                    patch("/users/{username}", username1)
+                    patch("/users/{username}", username)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(String.valueOf(new JSONObject(stepDefs.mapper.writeValueAsString(user))))
+                            .content(newPassword.toString())
                             .with(AuthenticationStepDefs.authenticate()))
                     .andDo(print());
         }

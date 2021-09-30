@@ -16,7 +16,7 @@ Feature: Modify User
   Scenario: Modify password
     Given I login as "admin" with password "password"
     When I modify the password of the user "user" with "newpassword"
-    Then The response code is 200
+    Then The response code is 204
     And I can login with username "user" and password "newpassword"
 
   Scenario: Modify lastname
