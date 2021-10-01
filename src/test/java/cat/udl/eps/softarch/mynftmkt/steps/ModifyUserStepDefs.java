@@ -5,7 +5,6 @@ import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
