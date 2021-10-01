@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,13 +59,13 @@ public class ModifyUserStepDefs {
     @When("I modify the name of the user {string} with {string}")
     public void iModifyTheNameOfTheUserWith(String username, String name) throws Exception {
         if (userRepository.existsById(username)) {
-            JSONObject newname = new JSONObject();
-            newname.put("name", name);
+            JSONObject newName = new JSONObject();
+            newName.put("name", name);
             stepDefs.result = stepDefs.mockMvc.perform(
                     // patch better than put to update only one field
                     patch("/users/{username}", username)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(newname.toString())
+                            .content(newName.toString())
                             .with(AuthenticationStepDefs.authenticate()))
                     .andDo(print());
         }
@@ -78,6 +79,56 @@ public class ModifyUserStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.name", is(name)));
+    }
+
+    @When("I modify the lastname of the user {string} with {string}")
+    public void iModifyTheLastnameOfTheUserWith(String username, String lastname) throws Exception {
+        if (userRepository.existsById(username)) {
+            JSONObject newLastName = new JSONObject();
+            newLastName.put("lastname", lastname);
+            stepDefs.result = stepDefs.mockMvc.perform(
+                            // patch better than put to update only one field
+                            patch("/users/{username}", username)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(newLastName.toString())
+                                    .with(AuthenticationStepDefs.authenticate()))
+                    .andDo(print());
+        }
+    }
+
+    @And("The lastname of the user {string} has been modified to {string}")
+    public void theLastnameOfTheUserHasBeenModifiedTo(String username, String lastname) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.lastname", is(lastname)));
+    }
+
+    @When("I modify the email of the user {string} with {string}")
+    public void iModifyTheEmailOfTheUserWith(String username, String email) throws Exception {
+        if (userRepository.existsById(username)) {
+            JSONObject newEmail = new JSONObject();
+            newEmail.put("email", email);
+            stepDefs.result = stepDefs.mockMvc.perform(
+                            // patch better than put to update only one field
+                            patch("/users/{username}", username)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(newEmail.toString())
+                                    .with(AuthenticationStepDefs.authenticate()))
+                    .andDo(print());
+        }
+    }
+
+    @And("The email of the user {string} has been modified to {string}")
+    public void theEmailOfTheUserHasBeenModifiedTo(String username, String email) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.email", is(email)));
     }
 }
 

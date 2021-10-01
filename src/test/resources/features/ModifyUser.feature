@@ -7,22 +7,28 @@ Feature: Modify User
     Given There is a registered administrator with username "admin" and password "password" and email "admin@sample.app"
     Given There is a registered user with username "user" and password "password" and email "user@sample.app>"
 
-  Scenario: Modify name
-    Given I login as "admin" with password "password"
-    When I modify the name of the user "user" with "newname"
-    Then The response code is 204
-    And The name of the user "user" has been modified to "newname"
-
   Scenario: Modify password
     Given I login as "admin" with password "password"
     When I modify the password of the user "user" with "newpassword"
     Then The response code is 204
     And I can login with username "user" and password "newpassword"
 
+  Scenario: Modify name
+    Given I login as "admin" with password "password"
+    When I modify the name of the user "user" with "newname"
+    Then The response code is 204
+    And The name of the user "user" has been modified to "newname"
+
   Scenario: Modify lastname
-    Given I login as "user" with password "password"
-    When I modify the lastname of the user "newuser" with "newlastname"
-    Then The response code is 200
+    Given I login as "admin" with password "password"
+    When I modify the lastname of the user "user" with "newlastname"
+    Then The response code is 204
     And The lastname of the user "user" has been modified to "newlastname"
+
+  Scenario: Modify email
+    Given I login as "admin" with password "password"
+    When I modify the email of the user "user" with "newemail@sample.app"
+    Then The response code is 204
+    And The email of the user "user" has been modified to "newemail@sample.app"
 
 
