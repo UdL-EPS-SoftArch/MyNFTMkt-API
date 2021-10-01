@@ -42,33 +42,30 @@ public class ModifyUserStepDefs {
 
     @When("I modify the password of the user {string} with {string}")
     public void iModifyThePasswordOfTheUserWith(String username, String password) throws Exception {
-        if(userRepository.existsById(username)){
-            String passwordEncoded = passwordEncoder.encode(password);
-            JSONObject newPassword = new JSONObject();
-            newPassword.put("password", passwordEncoded);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                    // patch better than put to update only one field
-                    patch("/users/{username}", username)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newPassword.toString())
-                            .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+        String passwordEncoded = passwordEncoder.encode(password);
+        JSONObject newPassword = new JSONObject();
+        newPassword.put("password", passwordEncoded);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                // patch better than put to update only one field
+                patch("/users/{username}", username)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newPassword.toString())
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
     }
 
     @When("I modify the name of the user {string} with {string}")
     public void iModifyTheNameOfTheUserWith(String username, String name) throws Exception {
-        if (userRepository.existsById(username)) {
-            JSONObject newName = new JSONObject();
-            newName.put("name", name);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                    // patch better than put to update only one field
-                    patch("/users/{username}", username)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newName.toString())
-                            .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+        JSONObject newName = new JSONObject();
+        newName.put("name", name);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                // patch better than put to update only one field
+                patch("/users/{username}", username)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newName.toString())
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
     @And("The name of the user {string} has been modified to {string}")
@@ -83,17 +80,16 @@ public class ModifyUserStepDefs {
 
     @When("I modify the lastname of the user {string} with {string}")
     public void iModifyTheLastnameOfTheUserWith(String username, String lastname) throws Exception {
-        if (userRepository.existsById(username)) {
-            JSONObject newLastName = new JSONObject();
-            newLastName.put("lastname", lastname);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            // patch better than put to update only one field
-                            patch("/users/{username}", username)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(newLastName.toString())
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+        JSONObject newLastName = new JSONObject();
+        newLastName.put("lastname", lastname);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        // patch better than put to update only one field
+                        patch("/users/{username}", username)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(newLastName.toString())
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
     }
 
     @And("The lastname of the user {string} has been modified to {string}")
@@ -108,17 +104,16 @@ public class ModifyUserStepDefs {
 
     @When("I modify the email of the user {string} with {string}")
     public void iModifyTheEmailOfTheUserWith(String username, String email) throws Exception {
-        if (userRepository.existsById(username)) {
-            JSONObject newEmail = new JSONObject();
-            newEmail.put("email", email);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            // patch better than put to update only one field
-                            patch("/users/{username}", username)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(newEmail.toString())
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+        JSONObject newEmail = new JSONObject();
+        newEmail.put("email", email);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        // patch better than put to update only one field
+                        patch("/users/{username}", username)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(newEmail.toString())
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
     }
 
     @And("The email of the user {string} has been modified to {string}")

@@ -31,4 +31,8 @@ Feature: Modify User
     Then The response code is 204
     And The email of the user "user" has been modified to "newemail@sample.app"
 
+  Scenario: Modify name of a user that doesn't exist
+    Given I login as "admin" with password "password"
+    When I modify the name of the user "user1" with "name"
+    Then The response code is 404
 
