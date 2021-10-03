@@ -6,7 +6,11 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import java.math.BigDecimal;
-import static org.hamcrest.Matchers.is;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,9 +57,9 @@ public class CreateBid {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.price").value(price));
+                .andExpect(jsonPath("$.price").value(price))
                 //.andExpect(jsonPath("$.NFTOffer", is(offerID))) //TODO
-                //.andExpect(jsonPath("$.dateTime").value(date)); TODO fix error
+                .andExpect(jsonPath("$.dateTime", startsWith(ZonedDateTime.now(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ISO_LOCAL_DATE))));
     }
 
     @And("^The status of the bid is \"([^\"]*)\"$")
