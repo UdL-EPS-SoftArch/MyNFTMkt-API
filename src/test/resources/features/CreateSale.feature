@@ -1,4 +1,4 @@
-Feature : Crate sale
+Feature: Crate sale
   As a user
   I want to create a sale
 
