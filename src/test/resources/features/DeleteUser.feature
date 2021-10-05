@@ -7,7 +7,7 @@ Feature: Delete User
     Given There is a registered administrator with username "admin" and password "password" and email "admin@sample.app"
 
   Scenario: Delete an existing user
-    Given There is a registered user with username "user" and password "password" and email "user@sample.app"
+    Given There is a registered user with username "user" and password "password" and email "gigituser@sample.app"
     And I login as "admin" with password "password"
     When I delete a user with username "user"
     Then The response code is 204
@@ -15,7 +15,7 @@ Feature: Delete User
 
   Scenario: Delete user with non-existing username
     Given I login as "admin" with password "password"
-    When I delete a user with username "newuser", email "newuser@sample.app" and password "newpassword"
+    When I delete a user with username "user1"
     Then The response code is 404
-    And The error message is "user does not exist"
+
 
