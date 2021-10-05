@@ -45,4 +45,6 @@ public class CreateSaleStepDefs {
     public void itHasNotBeenCreateAnySale() {
         Assert.assertTrue(saleRepository.count()==0);
     }
+
+
 }
