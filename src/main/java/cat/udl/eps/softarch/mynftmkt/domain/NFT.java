@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class NFT extends UriEntity<String>{
+public class NFT extends UriEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
