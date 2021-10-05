@@ -11,33 +11,29 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class CreateBid {
+public class BidStepDefs {
     final StepDefs stepDefs;
     final BidRepository bidRepository;
 
     private String newResourceUri;
 
 
-    CreateBid(StepDefs stepDefs, BidRepository bidRepository) {
+    BidStepDefs(StepDefs stepDefs, BidRepository bidRepository) {
         this.stepDefs = stepDefs;
         this.bidRepository = bidRepository;
         //TODO Repositories
     }
 
-    @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer with an id of \"([^\"]*)\"$")
-    public void makeBid(BigDecimal price, Long offerID) throws Throwable {
+    @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer$")
+    public void makeBid(BigDecimal price) throws Throwable {
         Bid bid = new Bid();
         bid.setPrice(price);
-        if (offerID != -1) {
-            //bid.setCreatedBy(); //TODO
-            //bid.setNFTOffer( el id ofeta);
-        }
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/bids")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -50,8 +46,8 @@ public class CreateBid {
         newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
     }
 
-    @And("^It has been created a bid with a price of \"([^\"]*)\" for the NFT offer with an id of \"([^\"]*)\"$")
-    public void ItHasBeenCreatedABidWithAPrice(BigDecimal price, Long offerID) throws Throwable {
+    @And("^It has been created a bid with a price of \"([^\"]*)\" for the NFT offer$")
+    public void ItHasBeenCreatedABidWithAPrice(BigDecimal price) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                         get(newResourceUri)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -70,6 +66,16 @@ public class CreateBid {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.status", is(Bid.StatusTypes.valueOf(status).toString())));
+    }
+
+    @When("^I try to delete the bid$")
+    public void deleteBid() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        delete(newResourceUri)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
 
