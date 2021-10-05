@@ -36,3 +36,12 @@ Feature: Modify User
     When I modify the name of the user "user1" with "name"
     Then The response code is 404
 
+  Scenario: Modify password without being logged in
+    Given I'm not logged in
+    When I modify the password of the user "user" with "newpassword"
+    Then The response code is 401
+
+  Scenario: Modify password being logged in as a user
+    Given I login as "user" with password "password"
+    When I modify the password of the user "user" with "newpassword"
+    Then The response code is 403
