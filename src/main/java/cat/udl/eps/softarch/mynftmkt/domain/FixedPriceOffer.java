@@ -8,6 +8,7 @@ package cat.udl.eps.softarch.mynftmkt.domain;
 //import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 //@EqualsAndHashCode(callSuper = true)
 public class FixedPriceOffer extends Offer{
     
-    @NotBlank
+    @Min(value=0)
     private int price;
 
     public int getPrice() {

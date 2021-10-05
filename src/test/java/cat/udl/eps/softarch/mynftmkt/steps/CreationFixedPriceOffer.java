@@ -12,12 +12,19 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 
+import java.net.http.HttpResponse;
+
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CreationFixedPriceOffer {
 
+    String newResourcesUri;
     int priceDesired;
     final StepDefs stepDefs;
     final UserRepository userRepository;
@@ -31,7 +38,7 @@ public class CreationFixedPriceOffer {
         this.fixedPriceOfferRepository = fixedPriceOfferRepository;
     }
 
-    @When("^I want to make Fixed Price Offer setting the price at (\\d+)$")
+    @When("^It has created a Fixed Price Offer with the price at (\\d+)$")
     public void saveNewPrice(int newPrice) throws Throwable {
         FixedPriceOffer offer = new FixedPriceOffer();
         offer.setPrice(newPrice);
@@ -44,6 +51,19 @@ public class CreationFixedPriceOffer {
                                 ).put("price", newPrice).toString())
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+
+    }
+    @Then("^The offer  matches the price, (\\d+)$")
+    public void checkPrice(int priceToCheck) throws Throwable{
+        stepDefs.result  = stepDefs.mockMvc.perform(
+                get(newResourcesUri)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price", is(priceToCheck)))
                 .andDo(print());
     }
 

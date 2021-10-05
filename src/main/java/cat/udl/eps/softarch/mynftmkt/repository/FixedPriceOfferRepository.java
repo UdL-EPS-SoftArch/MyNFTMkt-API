@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
 @RepositoryRestResource
-public interface FixedPriceOfferRepository extends PagingAndSortingRepository<FixedPriceOffer, Integer> {
+public interface FixedPriceOfferRepository extends PagingAndSortingRepository<FixedPriceOffer, Long> {
 }
