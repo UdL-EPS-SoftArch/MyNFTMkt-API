@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.handler;
 
 import cat.udl.eps.softarch.mynftmkt.domain.User;
+import cat.udl.eps.softarch.mynftmkt.exception.ForbiddenException;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +40,10 @@ public class UserEventHandler {
         logger.info("Before updating: {}", player.toString());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        boolean sameUsername = user.getUsername().equals(player.getUsername());
+        boolean sameId = user.getId().equals(player.getId());
         boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-        if (!sameUsername & !rolePlayerIsAdmin){
-            throw new Exception("The user who wants to modify the data isn't authorized"); // TODO create a new exception with unauthorized
+        if (!sameId & !rolePlayerIsAdmin){
+            throw new ForbiddenException();
         }
     }
 
