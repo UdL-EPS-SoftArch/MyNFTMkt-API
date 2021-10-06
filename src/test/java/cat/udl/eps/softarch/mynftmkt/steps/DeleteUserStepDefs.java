@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.When;
-import org.springframework.http.MediaType;
 
 public class DeleteUserStepDefs {
     final StepDefs stepDefs;
