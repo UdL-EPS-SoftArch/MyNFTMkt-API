@@ -5,7 +5,8 @@ Feature: Modify User
 
   Background:
     Given There is a registered administrator with username "admin" and password "password" and email "admin@sample.app"
-    Given There is a registered user with username "user" and password "password" and email "user@sample.app>"
+    Given There is a registered user with username "user" and password "password" and email "user@sample.app"
+    Given There is a registered user with username "user1" and password "password1" and email "user1@sample.app"
 
   Scenario: Modify password
     Given I login as "admin" with password "password"
@@ -33,7 +34,7 @@ Feature: Modify User
 
   Scenario: Modify name of a user that doesn't exist
     Given I login as "admin" with password "password"
-    When I modify the name of the user "user1" with "name"
+    When I modify the name of the user "user2" with "newname"
     Then The response code is 404
 
   Scenario: Modify password without being logged in
@@ -41,7 +42,13 @@ Feature: Modify User
     When I modify the password of the user "user" with "newpassword"
     Then The response code is 401
 
-  Scenario: Modify password being logged in as a user
-    Given I login as "user" with password "password"
+  Scenario: Modify password of user "user" being logged in as user "user1"
+    Given I login as "user1" with password "password1"
     When I modify the password of the user "user" with "newpassword"
     Then The response code is 403
+
+  Scenario: Modify password of user "user" being logged in as user "user"
+    Given I login as "user" with password "password"
+    When I modify the password of the user "user" with "newpassword"
+    Then The response code is 204
+    And I can login with username "user" and password "newpassword"

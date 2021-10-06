@@ -13,7 +13,11 @@ import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 @Component
 @RepositoryEventHandler
@@ -31,8 +35,15 @@ public class UserEventHandler {
     public void handleUserPreCreate(User player) { logger.info("Before creating: {}", player.toString()); }
 
     @HandleBeforeSave
-    public void handleUserPreSave(User player) {
+    public void handleUserPreSave(User player) throws Exception {
         logger.info("Before updating: {}", player.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean sameUsername = user.getUsername().equals(player.getUsername());
+        boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        if (!sameUsername & !rolePlayerIsAdmin){
+            throw new Exception("The user who wants to modify the data isn't authorized"); // TODO create a new exception with unauthorized
+        }
     }
 
     @HandleBeforeDelete
