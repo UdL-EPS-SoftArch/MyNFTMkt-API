@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.handler;
 
 import cat.udl.eps.softarch.mynftmkt.domain.User;
+import cat.udl.eps.softarch.mynftmkt.exception.ForbiddenException;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,11 @@ import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 @Component
 @RepositoryEventHandler
@@ -31,8 +36,15 @@ public class UserEventHandler {
     public void handleUserPreCreate(User player) { logger.info("Before creating: {}", player.toString()); }
 
     @HandleBeforeSave
-    public void handleUserPreSave(User player) {
+    public void handleUserPreSave(User player) throws Exception {
         logger.info("Before updating: {}", player.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean sameId = user.getId().equals(player.getId());
+        boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        if (!sameId & !rolePlayerIsAdmin){
+            throw new ForbiddenException();
+        }
     }
 
     @HandleBeforeDelete
