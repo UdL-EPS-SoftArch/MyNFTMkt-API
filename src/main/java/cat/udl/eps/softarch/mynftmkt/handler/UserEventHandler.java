@@ -35,8 +35,12 @@ public class UserEventHandler {
     @HandleBeforeCreate
     public void handleUserPreCreate(User player) { logger.info("Before creating: {}", player.toString()); }
 
+    /**
+     * @param player
+     * check that a user can only modify their own data, except if this user is an administrator
+     */
     @HandleBeforeSave
-    public void handleUserPreSave(User player) throws Exception {
+    public void handleUserPreSave(User player) {
         logger.info("Before updating: {}", player.toString());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -47,9 +51,20 @@ public class UserEventHandler {
         }
     }
 
+    /**
+     * @param player
+     * check that a user can only delete their own account, except if this user is an administrator
+     */
     @HandleBeforeDelete
     public void handleUserPreDelete(User player) {
         logger.info("Before deleting: {}", player.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean sameId = user.getId().equals(player.getId());
+        boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        if (!sameId & !rolePlayerIsAdmin){
+            throw new ForbiddenException();
+        }
     }
 
     @HandleBeforeLinkSave
