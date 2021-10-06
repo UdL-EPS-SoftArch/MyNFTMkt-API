@@ -67,6 +67,22 @@ public class CreationFixedPriceOffer {
                 .andDo(print());
     }
 
+    @When("^It is not possible to create a fixed price offer with price ([\\d-]+)$")
+    public void checkNotCorrect(int incorrectPrice) throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/fixedPriceOffers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new JSONObject(
+                        ).put("price", incorrectPrice).toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+  //              .andExpect(status().is(400));
+        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+
+    }
+
+
 
 
 
