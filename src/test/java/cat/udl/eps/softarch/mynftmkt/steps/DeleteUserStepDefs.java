@@ -14,7 +14,7 @@ public class DeleteUserStepDefs {
         this.userRepository = userRepository;
     }
     @When("I delete a user with username {string}")
-    public void iDeleteAUserWithUsernameEmailAndPassword(String username) throws Exception {
+    public void iDeleteAUserWithUsername(String username) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/users/{username}",username)
                         .with(AuthenticationStepDefs.authenticate()))
