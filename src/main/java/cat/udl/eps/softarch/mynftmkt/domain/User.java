@@ -49,6 +49,13 @@ public class User extends UriEntity<String> implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean passwordReset;
 
+    // Settings
+    @NotBlank
+    private String currency;
+
+    private Boolean darkMode;
+    // End of settings
+
     public void encodePassword() {
         this.password = passwordEncoder.encode(this.password);
     }
