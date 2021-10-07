@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 @Entity
@@ -33,6 +34,12 @@ public class User extends UriEntity<String> implements UserDetails {
     @Email
     @Column(unique = true)
     private String email;
+
+    private String name;
+
+    private String lastname;
+
+    private BigDecimal balance;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
@@ -79,4 +86,5 @@ public class User extends UriEntity<String> implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
     }
+
 }
