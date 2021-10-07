@@ -57,6 +57,18 @@ public class User extends UriEntity<String> implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Bid> bids;
 
+    // Will be uncommented when NFT and Settings class will exist
+
+    /*@OneToOne(mappedBy = "user")
+    private Settings settings;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_NFT",
+            joinColumns = @JoinColumn(name = "nft_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id",
+                    referencedColumnName = "username"))
+    private List<NFT> NFTs;*/
+
     @Override
     public String getId() {
         return this.username;
