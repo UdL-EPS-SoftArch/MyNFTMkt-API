@@ -1,7 +1,10 @@
 # MyNFTMkt-API
 Backend for an open-source NFT marketplace
 
+[![Open Issues](https://img.shields.io/github/issues-raw/UdL-EPS-SoftArch/MyNFTMkt-API?logo=github)](https://github.com/orgs/UdL-EPS-SoftArch/projects/11)
+[![CI/CD](https://github.com/UdL-EPS-SoftArch/MyNFTMkt-API/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/UdL-EPS-SoftArch/MyNFTMkt-API/actions)
 [![CucumberReports: UdL-EPS-SoftArch](https://messages.cucumber.io/api/report-collections/faed8ca5-e474-4a1a-a72a-b8e2a2cd69f0/badge)](https://reports.cucumber.io/report-collections/faed8ca5-e474-4a1a-a72a-b8e2a2cd69f0)
+[![Heroku App Status](https://heroku-shields.herokuapp.com/mynftmkt-api)](https://mynftmkt-api.herokuapp.com)
 
 ## Vision
 
