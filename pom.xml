@@ -87,19 +87,19 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit</artifactId>
-			<version>6.7.0</version>
+			<version>6.10.4</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>6.7.0</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>6.10.4</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-spring</artifactId>
-			<version>6.7.0</version>
+			<version>6.10.4</version>
 			<scope>test</scope>
 		</dependency>
         <dependency>
@@ -113,11 +113,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>9.0.27</version>
-		</dependency>
 	</dependencies>
 
 	<build>
