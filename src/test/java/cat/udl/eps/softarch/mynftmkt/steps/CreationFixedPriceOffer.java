@@ -16,8 +16,7 @@ import java.net.http.HttpResponse;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +37,7 @@ public class CreationFixedPriceOffer {
         this.fixedPriceOfferRepository = fixedPriceOfferRepository;
     }
 
+
     @When("^It has created a Fixed Price Offer with the price at (\\d+)$")
     public void saveNewPrice(int newPrice) throws Throwable {
         FixedPriceOffer offer = new FixedPriceOffer();
@@ -56,15 +56,20 @@ public class CreationFixedPriceOffer {
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
     }
-    @Then("^The offer  matches the price, (\\d+)$")
-    public void checkPrice(int priceToCheck) throws Throwable{
-        stepDefs.result  = stepDefs.mockMvc.perform(
-                get(newResourcesUri)
+
+
+    @Then("^I try to modify the fixed price offer")
+    public void modifyTheFixedPriceOffer() throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put(newResourcesUri)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new JSONObject(
+                        ).put("price", 5).toString())
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.price", is(priceToCheck)))
-                .andDo(print());
+                        .with(AuthenticationStepDefs.authenticate())
+        ).andDo(print()
+
+        );
     }
 
     @When("^It is not possible to create a fixed price offer with price ([\\d-]+)$")
@@ -77,10 +82,21 @@ public class CreationFixedPriceOffer {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-  //              .andExpect(status().is(400));
+
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
     }
+    @Then("^The offer  matches the price, (\\d+)$")
+    public void checkPrice(int priceToCheck) throws Throwable{
+        stepDefs.result  = stepDefs.mockMvc.perform(
+                        get(newResourcesUri)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price", is(priceToCheck)))
+                .andDo(print());
+    }
+
 
 
 
