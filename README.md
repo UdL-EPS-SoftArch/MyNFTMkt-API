@@ -1,6 +1,8 @@
 # MyNFTMkt-API
 Backend for an open-source NFT marketplace
 
+[![CucumberReports: UdL-EPS-SoftArch](https://messages.cucumber.io/api/report-collections/faed8ca5-e474-4a1a-a72a-b8e2a2cd69f0/badge)](https://reports.cucumber.io/report-collections/faed8ca5-e474-4a1a-a72a-b8e2a2cd69f0)
+
 ## Vision
 
 **For** people **who** want to trade NFTs
