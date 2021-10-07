@@ -54,22 +54,25 @@ public class User extends UriEntity<String> implements UserDetails {
         this.password = passwordEncoder.encode(this.password);
     }
 
-    @OneToMany(mappedBy = "user")
+    // Settings entity
+    @NotBlank
+    private String currency;
+
+    private Boolean darkMode;
+    // End of settings entity
+
+    // Bid entity
+    @OneToMany(mappedBy = "bidder")
     private List<Bid> bids;
+    // End of bid entity
 
-    // Will be uncommented when NFT and Settings class will exist
 
-    /*@OneToOne(mappedBy = "user")
-    private Settings settings;
-
+    // Will be uncommented when NFT is created
+    /*
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "Favorites",
-            joinColumns = @JoinColumn(name = "nft_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id",
-                    referencedColumnName = "username"))
     private List<NFT> favoriteNFTs;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "owner")
     private List<NFT> ownedNFTs;
     */
 
