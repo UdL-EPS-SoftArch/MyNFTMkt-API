@@ -12,14 +12,18 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.LocalDateTime;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class CreateSaleStepDefs {
 
     final  StepDefs stepDefs;
     final  SaleRepository saleRepository;
+
+    public static String id;
 
     public CreateSaleStepDefs(StepDefs stepDefs, SaleRepository saleRepository) {
 
@@ -46,5 +50,14 @@ public class CreateSaleStepDefs {
         Assert.assertTrue(saleRepository.count()==0);
     }
 
-
+    @And("It has been created a new sale")
+    public void itHasBeenCreatedANewSale() throws Exception {
+        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get(id)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
