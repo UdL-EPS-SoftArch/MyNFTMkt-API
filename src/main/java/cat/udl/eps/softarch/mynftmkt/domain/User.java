@@ -63,11 +63,15 @@ public class User extends UriEntity<String> implements UserDetails {
     private Settings settings;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_NFT",
+    @JoinTable(name = "Favorites",
             joinColumns = @JoinColumn(name = "nft_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id",
                     referencedColumnName = "username"))
-    private List<NFT> NFTs;*/
+    private List<NFT> favoriteNFTs;
+
+    @OneToMany(mappedBy = "user")
+    private List<NFT> ownedNFTs;
+    */
 
     @Override
     public String getId() {
