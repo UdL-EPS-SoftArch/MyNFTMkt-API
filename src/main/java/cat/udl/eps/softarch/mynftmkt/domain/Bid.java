@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -32,9 +33,15 @@ public class Bid extends UriEntity<Long> {
 
     private StatusTypes status;
 
-    /*@ManyToOne
+    @ManyToOne
+    //@Column(nullable = false)
     private Offer NFTOffer;
 
     @ManyToOne
-    private User createdBy;*/
+    //@Column(nullable = false)
+    //@JoinColumn(name = "bidder_id")
+    private User bidder;
+
+    @OneToOne
+    private Sale sale;
 }

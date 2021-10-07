@@ -4,15 +4,19 @@ Feature: Make a Bid
   I want to make a bid for a specific NFT I want to purchase
 
   Background:
-    Given There is a registered user with username "user1" and password "password" and email "user1@sample.app"
-    #TODO And There is an NFT offer made by "seller1"
+    Given There is a registered user with username "buyer1" and password "password" and email "buyer1@sample.app"
+    And There is a registered user with username "seller1" and password "password" and email "seller1@sample.app"
+    #And There is an NFT made by "seller1"
 
-  Scenario: Make a new bid (without relationships)
-    Given I login as "user1" with password "password"
+
+  Scenario: Make a new bid for an fixed NFT offer
+    Given I login as "buyer1" with password "password"
+    #And There is an fixed NFT offer with a price of "2.0"
     When I make a bid with a price of "2.0" for the NFT offer
     Then The response code is 201
     And It has been created a bid with a price of "2.0" for the NFT offer
     And The status of the bid is "ACTIVE"
+    And The bid is associated with "buyer2"
 
   Scenario: Make a new bid without being logged in
     Given I'm not logged in
@@ -25,4 +29,19 @@ Feature: Make a Bid
     When I make a bid with a price of "-5" for the NFT offer
     Then The response code is 400
     And The error message is "must be greater than or equal to 0.01"
+
+
+
+
+
+  # Scenario: Como [usuario concreto]
+#  quiero [realizar acción concreta]
+ # para [resultado o beneficio]
+
+ #   Given Cumplo una precondición
+ #   When Ejecuto una acción
+ #   Then Observo este resultado
+ #   But No debería poder observar este otro resultado
+
+
 

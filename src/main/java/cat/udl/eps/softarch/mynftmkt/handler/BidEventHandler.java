@@ -1,10 +1,12 @@
 package cat.udl.eps.softarch.mynftmkt.handler;
 
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
+import cat.udl.eps.softarch.mynftmkt.domain.User;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -19,11 +21,16 @@ public class BidEventHandler {
 
 
     final BidRepository bidRepository;
-    
+
     public BidEventHandler(BidRepository bidRepository) {this.bidRepository = bidRepository;}
 
     @HandleBeforeCreate
-    public void handleBidPreCreate(Bid bid) { logger.info("Before creating: {}", bid.toString()); }
+    public void handleBidPreCreate(Bid bid) {
+        logger.info("Before creating: {}", bid.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        bid.setBidder(user);
+        bidRepository.save(bid);
+    }
 
     @HandleBeforeSave
     public void handleBidPreSave(Bid bid) {
