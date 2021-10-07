@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "AcademicRecruitUser") //Avoid collision with system table User in Postgres
@@ -52,6 +53,9 @@ public class User extends UriEntity<String> implements UserDetails {
     public void encodePassword() {
         this.password = passwordEncoder.encode(this.password);
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Bid> bids;
 
     @Override
     public String getId() {
