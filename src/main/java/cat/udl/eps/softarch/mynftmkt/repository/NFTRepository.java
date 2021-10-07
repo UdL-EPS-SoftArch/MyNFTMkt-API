@@ -9,5 +9,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 @RepositoryRestResource
-public interface NFTRepository extends PagingAndSortingRepository<NFT, String> {
+public interface NFTRepository extends PagingAndSortingRepository<NFT, Long> {
+
 }
