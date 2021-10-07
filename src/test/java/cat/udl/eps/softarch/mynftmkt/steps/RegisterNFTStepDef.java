@@ -13,9 +13,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class RegisterNFTStepDef {
@@ -62,8 +65,16 @@ public class RegisterNFTStepDef {
     }
 
     @And("It has been created a NFT title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
-    public void itHasBeenCreatedANFTTitleDescriptionKeywordsCategoryMediaTypeAndContent(String arg0, String arg1,
-                                                                                        String arg2, String arg3,
-                                                                                        String arg4, String arg5) {
+    public void itHasBeenCreatedANFTTitleDescriptionKeywordsCategoryMediaTypeAndContent(String title, String description,
+                                                                                        String keywords, String category,
+                                                                                        String mediType, String content)
+                                                                                        throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get(newResourcesUri)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is(title)));
     }
 }
