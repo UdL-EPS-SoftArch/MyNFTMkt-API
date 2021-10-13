@@ -12,6 +12,7 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 
+import java.math.BigDecimal;
 import java.net.http.HttpResponse;
 
 import static org.hamcrest.Matchers.is;
@@ -38,10 +39,11 @@ public class CreationFixedPriceOffer {
     }
 
 
-    @When("^It has created a Fixed Price Offer with the price at (\\d+)$")
-    public void saveNewPrice(int newPrice) throws Throwable {
+    @When("^It has created a Fixed Price Offer with the price at ([\\d-.]+)$")
+    public void saveNewPrice(BigDecimal newPrice) throws Throwable {
         FixedPriceOffer offer = new FixedPriceOffer();
         offer.setPrice(newPrice);
+
 
 
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -72,8 +74,8 @@ public class CreationFixedPriceOffer {
         );
     }
 
-    @When("^It is not possible to create a fixed price offer with price ([\\d-]+)$")
-    public void checkNotCorrect(int incorrectPrice) throws Throwable{
+    @When("^It is not possible to create a fixed price offer with price ([\\d-.]+)$")
+    public void checkNotCorrect(BigDecimal incorrectPrice) throws Throwable{
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/fixedPriceOffers")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,14 +88,15 @@ public class CreationFixedPriceOffer {
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
     }
-    @Then("^The offer  matches the price, (\\d+)$")
-    public void checkPrice(int priceToCheck) throws Throwable{
+    @Then("^The offer matches the price, ([\\d-.]+)$")
+    public void checkPrice(BigDecimal priceToCheck) throws Throwable{
+
         stepDefs.result  = stepDefs.mockMvc.perform(
                         get(newResourcesUri)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.price", is(priceToCheck)))
+                .andExpect(jsonPath("$.price").value(priceToCheck))
                 .andDo(print());
     }
 
