@@ -61,7 +61,7 @@ public class User extends UriEntity<String> implements UserDetails {
     private Boolean darkMode;
 
     // NFT entity
-    //private List<NFT> NFTs;
+    //private List<NFT> favoriteNFTs;
 
     @Override
     public String getId() {
