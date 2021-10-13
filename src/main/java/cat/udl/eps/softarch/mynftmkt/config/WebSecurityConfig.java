@@ -28,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/identity").authenticated()
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
+                .antMatchers(HttpMethod.PATCH, "/users/*").authenticated()
                 .antMatchers(HttpMethod.POST, "/users/*").denyAll()
                     //added to deny the modifications to  fixedPriceOffers
                 .antMatchers(HttpMethod.PUT,"/fixedPriceOffers/*").denyAll()
@@ -35,13 +36,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                     //Only admin and author can delete-cancel a fixed Price offer, but we don't know the author yet
                 .antMatchers(HttpMethod.DELETE,"/fixedPriceOffers/*").denyAll()
 
+                .antMatchers(HttpMethod.DELETE, "/bids/*").denyAll()
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
-                .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
-
-
-
 
                 .anyRequest().permitAll()
                 .and()
