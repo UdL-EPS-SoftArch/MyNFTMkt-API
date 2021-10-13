@@ -35,6 +35,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/sales/*").authenticated()
 
 
                 .anyRequest().permitAll()

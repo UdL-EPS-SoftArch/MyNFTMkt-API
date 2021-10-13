@@ -16,9 +16,3 @@ Feature: Update sale
     Given I login as "admin" with password "password"
     When I change the date of the sale with id "1" to "2021-01-01T00:00:00.000+01:00[Europe/Paris]"
     Then The response code is 200
-
-  Scenario: Update sale date to blank
-    Given I login as "admin" with password "password"
-    When I change the date of the sale with id "1" to ""
-    Then The response code is 400
-    And The error message is "must not be blank"
