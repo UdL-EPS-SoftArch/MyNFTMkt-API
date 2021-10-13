@@ -10,6 +10,7 @@ package cat.udl.eps.softarch.mynftmkt.domain;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 
 @Entity
 //@Data
@@ -17,13 +18,13 @@ import javax.validation.constraints.NotBlank;
 public class FixedPriceOffer extends Offer{
     
     @Min(value=0)
-    private int price;
+    private BigDecimal price;
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
