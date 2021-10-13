@@ -59,22 +59,9 @@ public class User extends UriEntity<String> implements UserDetails {
     private String currency;
 
     private Boolean darkMode;
-    // End of settings entity
 
-    // Bid entity
-    @OneToMany(mappedBy = "bidder")
-    private List<Bid> bids;
-    // End of bid entity
-
-
-    // Will be uncommented when NFT is created
-    /*
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<NFT> favoriteNFTs;
-
-    @OneToMany(mappedBy = "owner")
-    private List<NFT> ownedNFTs;
-    */
+    // NFT entity
+    //private List<NFT> NFTs;
 
     @Override
     public String getId() {
