@@ -56,7 +56,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
     // Settings entity
     @NotBlank
-    private String currency;
+    private String currency = "euro";
 
     private Boolean darkMode;
 
