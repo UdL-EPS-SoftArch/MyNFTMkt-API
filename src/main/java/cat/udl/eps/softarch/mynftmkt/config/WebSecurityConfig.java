@@ -31,10 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH, "/users/*").authenticated()
                 .antMatchers(HttpMethod.POST, "/users/*").denyAll()
                 //added to deny the modifications to  fixedPriceOffers
-                .antMatchers(HttpMethod.PUT,"/fixedPriceOffers/*").denyAll()
-                .antMatchers(HttpMethod.PATCH,"/fixedPriceOffers/*").denyAll()
+                .antMatchers(HttpMethod.PUT, "/fixedPriceOffers/*").denyAll()
+                .antMatchers(HttpMethod.PATCH, "/fixedPriceOffers/*").denyAll()
                 //Only admin and author can delete-cancel a fixed Price offer, but we don't know the author yet
-                .antMatchers(HttpMethod.DELETE,"/fixedPriceOffers/*").denyAll()
+                .antMatchers(HttpMethod.DELETE, "/fixedPriceOffers/*").denyAll()
 
                 .antMatchers(HttpMethod.DELETE, "/bids/*").denyAll()
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
