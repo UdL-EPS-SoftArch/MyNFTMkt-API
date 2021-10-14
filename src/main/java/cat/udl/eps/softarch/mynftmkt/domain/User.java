@@ -60,8 +60,8 @@ public class User extends UriEntity<String> implements UserDetails {
 
     private Boolean darkMode;
 
-    // NFT entity
-    //private List<NFT> favoriteNFTs;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<NFT> favoriteNFTs;
 
     @Override
     public String getId() {
