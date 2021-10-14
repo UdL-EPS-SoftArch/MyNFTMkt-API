@@ -43,6 +43,7 @@ public class RegisterUserStepDefs {
       user.setEmail(email);
       user.setUsername(username);
       user.setPassword(password);
+      user.setCurrency("euro");
       user.encodePassword();
       userRepository.save(user);
     }
@@ -65,6 +66,7 @@ public class RegisterUserStepDefs {
     User user = new User();
     user.setUsername(username);
     user.setEmail(email);
+    user.setCurrency("euro");
 
     stepDefs.result = stepDefs.mockMvc.perform(
             post("/users")
