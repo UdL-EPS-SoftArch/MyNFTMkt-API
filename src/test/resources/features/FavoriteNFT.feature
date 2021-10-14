@@ -1,0 +1,14 @@
+Feature: Favorite NFT
+  In order to control NFT's in the app
+  As a User
+  I want to add or delete authorised NFT's
+
+  Background:
+    Given There is a registered user with username "user" and password "password" and email "user@sample.app"
+    Given There is a registered NFT with id 1
+
+  Scenario: Add favorite NFT to an existing user
+    Given I login as "user" with password "password"
+    When I add a new NFT with title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content" to favorites
+    Then The response code is 201
+    And It has been added a NFT title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content" to favorite NFTs of user with the username "user"
