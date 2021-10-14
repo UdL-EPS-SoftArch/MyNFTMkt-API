@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -34,14 +35,11 @@ public class Bid extends UriEntity<Long> {
     private StatusTypes status;
 
     @ManyToOne
-    //@Column(nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Offer NFTOffer;
 
     @ManyToOne
-    //@Column(nullable = false)
-    //@JoinColumn(name = "bidder_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private User bidder;
 
-    @OneToOne
-    private Sale sale;
 }
