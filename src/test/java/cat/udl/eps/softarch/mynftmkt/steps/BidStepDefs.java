@@ -25,6 +25,7 @@ public class BidStepDefs {
     final UserRepository userRepository;
 
     private String newResourceUri;
+    private FixedPriceOffer offer;
 
 
     BidStepDefs(StepDefs stepDefs, BidRepository bidRepository, UserRepository userRepository) {
@@ -33,10 +34,19 @@ public class BidStepDefs {
         this.userRepository = userRepository;
     }
 
+
+    @And("^There is an fixed NFT offer with a price of \"([^\"]*)\"$")
+    public void existsNFTOffer(BigDecimal price) throws Throwable {
+        offer = new FixedPriceOffer();
+        offer.setPrice(price);
+    }
+
     @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer$")
     public void makeBid(BigDecimal price) throws Throwable {
         Bid bid = new Bid();
         bid.setPrice(price);
+        bid.setBidder(userRepository.findById(AuthenticationStepDefs.currentUsername).get());
+        bid.setNFTOffer(offer);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/bids")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,13 +61,12 @@ public class BidStepDefs {
 
     @And("^The bid is associated with \"([^\"]*)\"$")
     public void TheBidIsAssociatedWith(String username) throws Throwable {
-        User usario = userRepository.findById(username).get();
         stepDefs.result = stepDefs.mockMvc.perform(
                         get(newResourceUri + "bidder")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-                //.andExpect(jsonPath("$.id", is(username)));
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(username)));
     }
 
     /*

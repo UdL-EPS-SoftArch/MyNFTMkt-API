@@ -1,7 +1,10 @@
 package cat.udl.eps.softarch.mynftmkt.handler;
 
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
+import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
+import cat.udl.eps.softarch.mynftmkt.domain.Offer;
 import cat.udl.eps.softarch.mynftmkt.domain.User;
+import cat.udl.eps.softarch.mynftmkt.exception.UnmatchingPricesException;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,16 @@ public class BidEventHandler {
         logger.info("Before creating: {}", bid.toString());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         bid.setBidder(user);
+
+
+        //TODO fix
+        //FixedPriceOffer offer = bid.getNFTOffer();
+        //offer.getPrice();
+        //if (offer instanceof  FixedPriceOffer )
+
+        /*if(!bid.getPrice().equals(offer.getPrice())) {
+            throw new UnmatchingPricesException();
+        }*/
         bidRepository.save(bid);
     }
 
