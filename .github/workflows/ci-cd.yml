@@ -3,7 +3,7 @@
 #  - https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 #  - https://github.com/marketplace/actions/deploy-docker-image-to-heroku-app
 
-name: CI with Maven and CD with Heroku and Docker
+name: CI/CD
 
 on:
   push:
