@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mynftmkt.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,4 +16,10 @@ public class Offer extends UriEntity<Long> {
     private Long id;
 
     private ZonedDateTime dateTime;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private NFT NFTOffer;
+
+
 }
