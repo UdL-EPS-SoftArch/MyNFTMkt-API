@@ -15,7 +15,7 @@ Feature: Create an Offer with a Fixed Price
     When It has created a Fixed Price Offer with the price at 10.0
     Then The error message is "Unauthorized"
 
-  Scenario: you are not able to modify a fixed price offer
+  Scenario: You are not able to modify a fixed price offer
     Given There is a registered user with username "newuser" and password "password" and email "newuser@sample.app"
     And I login as "newuser" with password "password"
     When It has created a Fixed Price Offer with the price at 10.0
@@ -29,3 +29,22 @@ Feature: Create an Offer with a Fixed Price
     When It is not possible to create a fixed price offer with price -1.0
     Then The response code is 400
 
+
+
+  Scenario: Create a new Fixed Price Offer with a linked NFT
+    Given There is a registered user with username "newuser" and password "password" and email "newuser@sample.app"
+    And There is no registered NFT with id 1
+    And I login as "newuser" with password "password"
+    And I register a new NFT with title "pepito", description "pepito es un grande", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
+    And The response code is 201
+    When I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito"
+    Then The offer matches the price, 10.0.
+    And The offer NFT matches the NFT "pepito"
+
+  Scenario: Create a Fixed Price Offer with an already linked NFT to another offer
+    Given There is a registered user with username "newuser" and password "password" and email "newuser@sample.app"
+    And There is no registered NFT with id 1
+    And I login as "newuser" with password "password"
+    And I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito"
+    When I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito"
+    Then The response code is 400
