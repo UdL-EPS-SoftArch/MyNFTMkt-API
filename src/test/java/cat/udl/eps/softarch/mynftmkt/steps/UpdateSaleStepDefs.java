@@ -14,8 +14,6 @@ public class UpdateSaleStepDefs {
     final StepDefs stepDefs;
     final SaleRepository saleRepository;
 
-    private String newUri;
-
     public UpdateSaleStepDefs(StepDefs stepDefs, SaleRepository saleRepository) {
         this.stepDefs = stepDefs;
         this.saleRepository = saleRepository;
@@ -23,12 +21,10 @@ public class UpdateSaleStepDefs {
 
     @When("I change the date of the sale with id {string} to {string}")
     public void iChangeTheDateOfTheSaleWithIdTo(String id, String newDate) throws Throwable {
-        ZonedDateTime newZonedDateTime = ZonedDateTime.parse(newDate);
-        newUri = "/sales/"+ id;
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch(newUri)
+                patch("/sales/"+ id)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content((new JSONObject().put("dateTime", newZonedDateTime)).toString())
+                        .content((new JSONObject().put("dateTime", ZonedDateTime.parse(newDate))).toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate())
         ).andDo(print());
