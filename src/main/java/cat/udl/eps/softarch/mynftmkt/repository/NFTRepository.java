@@ -11,4 +11,6 @@ import java.util.List;
 @RepositoryRestResource
 public interface NFTRepository extends PagingAndSortingRepository<NFT, Long> {
 
+    List<NFT> findByUser(User user);
+
 }
