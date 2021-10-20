@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -61,14 +60,7 @@ public class CreateSaleStepDefs {
 
     @When("I create a new sale with the previous bid")
     public void iCreateANewSaleWithThePreviousBid() throws Exception {
-        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
-        stepDefs.result = stepDefs.mockMvc.perform(
-                        get(id)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(status().isOk());
-
+        itHasBeenCreatedANewSale();
         Sale sale = new Sale();
         sale.setBidSale(bidRepository.findById(Long.parseLong(id.substring(id.lastIndexOf("/")+1))).get());
         stepDefs.result = stepDefs.mockMvc.perform(
