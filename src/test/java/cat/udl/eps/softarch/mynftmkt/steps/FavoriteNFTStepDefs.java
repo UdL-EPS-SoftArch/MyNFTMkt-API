@@ -55,8 +55,7 @@ public class FavoriteNFTStepDefs {
     @Transactional
     @When("I add the NFT with id {long} to the favorites of user {string}")
     public void iAddTheNFTWithIdToTheFavoritesOfUser(Long id, String username) throws Exception {
-        Optional<NFT> nft = Optional.of(new NFT());
-        nft = nftRepository.findById(id);
+        Optional<NFT> nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
                         put("/users/{username}/favoriteNFTs", username)
