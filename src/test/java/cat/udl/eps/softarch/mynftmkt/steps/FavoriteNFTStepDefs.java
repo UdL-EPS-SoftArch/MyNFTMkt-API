@@ -10,14 +10,17 @@ package cat.udl.eps.softarch.mynftmkt.steps;
         import org.springframework.http.MediaType;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
         import org.springframework.security.crypto.password.PasswordEncoder;
+        import org.springframework.transaction.annotation.Transactional;
 
+        import java.util.Arrays;
         import java.util.List;
         import java.util.Optional;
 
         import static org.hamcrest.Matchers.contains;
         import static org.hamcrest.Matchers.is;
         import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
         import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -49,28 +52,28 @@ public class FavoriteNFTStepDefs {
         }
     }
 
+    @Transactional
     @When("I add the NFT with id {long} to the favorites of user {string}")
     public void iAddTheNFTWithIdToTheFavoritesOfUser(Long id, String username) throws Exception {
         Optional<NFT> nft = Optional.of(new NFT());
         nft = nftRepository.findById(id);
-        JSONObject newNFT = new JSONObject();
-        newNFT.put("favoriteNFTs", nft);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
-                        patch("/users/{username}", username)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(String.valueOf(newNFT))
+                        put("/users/{username}/favoriteNFTs", username)
+                                .contentType("text/uri-list")
+                                .content(nft.get().getUri())
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
 
     @And("It has been added a NFT with id {long}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to favorite NFTs of user with the username {string}")
     public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToFavoriteNFTsOfUserWithTheUsername(Long id, String title, String description, String keywords, String category, String mediaType, String content, String username) throws Exception {
+        String path = "/nFTs/" + id;
         stepDefs.result = stepDefs.mockMvc.perform(
-                        get("/users/{username}", username)
+                        get("/users/{username}/favoriteNFTs", username)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.favoriteNFTs[*].id", contains(id)));
+                .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path)));
     }
 }
