@@ -19,7 +19,7 @@ public class Offer extends UriEntity<Long> {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private NFT NFTOffer;
+    private NFT nft;
 
 
 }
