@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 
         import cat.udl.eps.softarch.mynftmkt.domain.NFT;
+        import cat.udl.eps.softarch.mynftmkt.domain.User;
         import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
         import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
         import io.cucumber.java.en.And;
@@ -10,6 +11,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
         import org.springframework.http.MediaType;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
         import org.springframework.security.crypto.password.PasswordEncoder;
+        import org.springframework.test.web.servlet.ResultMatcher;
         import org.springframework.transaction.annotation.Transactional;
 
         import java.util.Arrays;
@@ -18,9 +20,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
 
         import static org.hamcrest.Matchers.contains;
         import static org.hamcrest.Matchers.is;
-        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
         import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -55,8 +55,7 @@ public class FavoriteNFTStepDefs {
     @Transactional
     @When("I add the NFT with id {long} to the favorites of user {string}")
     public void iAddTheNFTWithIdToTheFavoritesOfUser(Long id, String username) throws Exception {
-        Optional<NFT> nft = Optional.of(new NFT());
-        nft = nftRepository.findById(id);
+        Optional<NFT> nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
                         put("/users/{username}/favoriteNFTs", username)
@@ -75,5 +74,35 @@ public class FavoriteNFTStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path)));
+    }
+
+    @Transactional
+    @And("There is a registered NFT with id {long} in the list of favorites of user {string}")
+    public void thereIsARegisteredNFTWithIdInTheListOfFavoritesOfUser(Long id, String username) {
+        Optional<User> user = userRepository.findById(username);
+        Optional<NFT> nft = nftRepository.findById(id);
+        if(!user.get().getFavoriteNFTs().contains(nft)) {
+            user.get().getFavoriteNFTs().add(nft.get());
+            userRepository.save(user.get());
+        }
+    }
+
+
+    @When("I remove the NFT with id {int} from the favorites of user {string}")
+    public void iRemoveTheNFTWithIdFromTheFavoritesOfUser(int id, String username)  throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        delete("/users/{username}/favoriteNFTs/{id}",username,id)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @And("It has been removed a NFT with id {long} from favorite NFTs of user with the username {string}")
+    public void itHasBeenRemovedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentFromFavoriteNFTsOfUserWithTheUsername(Long id, String username) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}/favoriteNFTs", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$._embedded.nFTs").isEmpty());
     }
 }
