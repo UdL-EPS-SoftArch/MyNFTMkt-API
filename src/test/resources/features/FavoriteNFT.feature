@@ -22,12 +22,15 @@ Feature: Favorite NFT
     Then The response code is 204
     And It has been removed a NFT with id 1 from favorite NFTs of user with the username "user"
 
-    Scenario: Add an NFT to the favorites of a user who already has one
-      Given I login as "user" with password "password"
-      When I add the NFT with id 1 to the favorites of user "user1"
-      Then The response code is 404
+  Scenario: Add an NFT to the favorites of a user who already has one
+    Given I login as "user" with password "password"
+    When I add the NFT with id 1 to the favorites of user "user1"
+    Then The response code is 404
+    #TODO Scenario add an NFT to the favorites of a user who already has a other in his list
     #TODO Scenario add an NFT to the favorites of a non existing user
     #TODO Scenario delete an NFT to the favorites of a non existing user
     #TODO Scenario delete an NFT to the favorites of a user who has many registered NFTs
+    #TODO Scenario add an NFT to to the favorites of a user who already has this one in his list
+    #TODO Scenario user1 wants to add one NFT to the favorites of user2 (impossible)
 
 
