@@ -4,6 +4,7 @@ Feature: Favorite NFT
   I want to add or delete authorised NFT's
 
   Background:
+    Given There is a registered user with username "admin" and password "password" and email "admin@sample.app"
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered NFT with id 1, title "title", description "description", keywords "tag1, tag2, tag3", category "category", mediaType "mediaType" and content "content"
     Given There is a registered NFT with id 2, title "title1", description "description1", keywords "tag4, tag5, tag6", category "category1", mediaType "mediaType1" and content "content1"
@@ -32,7 +33,11 @@ Feature: Favorite NFT
      And There is a registered NFT with id 2 in the list of favorites of user "user"
      When I add the NFT with id 1 to the favorites of user "user"
      Then The response code is 204
-    #TODO Scenario add an NFT to the favorites of a non existing user
+
+    Scenario: Add an NFT to the favorites of a non existing user
+      Given I login as "admin" with password "password"
+      When I add the NFT with id 1 to the favorites of user "user3"
+      Then The response code is 404
     #TODO Scenario delete an NFT to the favorites of a non existing user
     #TODO Scenario delete an NFT to the favorites of a user who has many registered NFTs
     #TODO Scenario add an NFT to to the favorites of a user who already has this one in his list
