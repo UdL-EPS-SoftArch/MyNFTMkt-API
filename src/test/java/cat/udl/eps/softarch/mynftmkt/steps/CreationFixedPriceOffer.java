@@ -69,9 +69,9 @@ public class CreationFixedPriceOffer {
     public void saveNewPrice(BigDecimal newPrice, String title) throws Throwable {
         //FixedPriceOffer offer = new FixedPriceOffer();
         offer.setPrice(newPrice);
-        offer.setNFTOffer(nftRepository.findByTitle(title));
+        offer.setNft(nftRepository.findByTitle(title));
 
-        System.out.print("NFT AGAFAT:" + offer.getNFTOffer());
+        System.out.print("NFT AGAFAT:" + offer.getNft());
 
 
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -130,9 +130,9 @@ public class CreationFixedPriceOffer {
 
     @Then("^The offer NFT matches the NFT \"([^\"]*)\"$")
     public void checkPrice(String name) throws Throwable{
-
+        System.out.print(newResourcesUri);
         stepDefs.result  = stepDefs.mockMvc.perform(
-                get(newResourcesUri+"/OfferNFT")
+                get(newResourcesUri+"/nft/")
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andExpect(status().isOk())

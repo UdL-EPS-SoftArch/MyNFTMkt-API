@@ -17,9 +17,9 @@ public class Offer extends UriEntity<Long> {
 
     private ZonedDateTime dateTime;
 
-    @ManyToOne
+    @OneToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private NFT NFTOffer;
+    private NFT nft;
 
 
 }
