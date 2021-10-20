@@ -36,7 +36,7 @@ public class Bid extends UriEntity<Long> {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private Offer NFTOffer;
+    private Offer offer;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)

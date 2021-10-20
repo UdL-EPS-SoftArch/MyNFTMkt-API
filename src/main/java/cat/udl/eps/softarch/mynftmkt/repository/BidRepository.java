@@ -11,5 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface BidRepository extends PagingAndSortingRepository<Bid, Long> {
     List<Bid> findByBidder(User user);
-    List<Bid> findByNFTOffer(Offer offer);
+    List<Bid> findByOffer(Offer offer);
 }

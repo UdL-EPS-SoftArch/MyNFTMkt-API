@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
 import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
-import cat.udl.eps.softarch.mynftmkt.domain.User;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.FixedPriceOfferRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,6 +41,7 @@ public class BidStepDefs {
     public void existsNFTOffer(BigDecimal price) throws Throwable {
         offer = new FixedPriceOffer();
         offer.setPrice(price);
+        offer = fixedPriceOfferRepository.save(offer);
     }
 
     @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer created$")
@@ -50,10 +49,10 @@ public class BidStepDefs {
         Bid bid = new Bid();
         bid.setPrice(price);
         bid.setBidder(userRepository.findById(AuthenticationStepDefs.currentUsername).get());
-        bid.setNFTOffer(offer);
+        bid.setOffer(offer);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/bids")
-                                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
                                 .content(new JSONObject(
                                         stepDefs.mapper.writeValueAsString(bid)
                                 ).toString())
