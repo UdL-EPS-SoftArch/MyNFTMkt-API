@@ -20,7 +20,7 @@ Feature: Favorite NFT
     And There is a registered NFT with id 1 in the list of favorites of user "user"
     When I remove the NFT with id 1 from the favorites of user "user"
     Then The response code is 204
-    And It has been removed a NFT with id 1, title "title", description "description", keywords "tag1, tag2, tag3", category "category", mediaType "mediaType" and content "content" from favorite NFTs of user with the username "user"
+    And It has been removed a NFT with id 1 from favorite NFTs of user with the username "user"
 
     #TODO Scenario add an NFT to the favorites of a user who already has a other in his list
     #TODO Scenario add an NFT to the favorites of a non existing user
