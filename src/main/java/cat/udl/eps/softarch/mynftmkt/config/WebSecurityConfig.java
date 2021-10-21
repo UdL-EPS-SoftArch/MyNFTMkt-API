@@ -29,6 +29,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                 .antMatchers(HttpMethod.GET, "/identity").authenticated()
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
                 .antMatchers(HttpMethod.PATCH, "/users/*").authenticated()
+                .antMatchers(HttpMethod.PUT, "/users/*").authenticated()
                 .antMatchers(HttpMethod.POST, "/users/*").denyAll()
                 //added to deny the modifications to  fixedPriceOffers
                 .antMatchers(HttpMethod.PUT, "/fixedPriceOffers/*").denyAll()
