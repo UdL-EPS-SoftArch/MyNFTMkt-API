@@ -32,9 +32,9 @@ public class Bid extends UriEntity<Long> {
 
     private StatusTypes status;
 
-    /*@ManyToOne
+    @ManyToOne
     private Offer offer;
 
     @ManyToOne
-    private User createdBy;*/
+    private User createdBy;
 }
