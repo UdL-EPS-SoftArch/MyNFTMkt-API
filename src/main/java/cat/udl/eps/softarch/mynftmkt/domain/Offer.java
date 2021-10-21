@@ -19,7 +19,7 @@ public abstract class Offer extends UriEntity<Long> {
 
     private ZonedDateTime dateTime;
 
-    @ManyToOne
+    @OneToOne
     @JsonIdentityReference(alwaysAsId = true)
     private NFT nft;
 
