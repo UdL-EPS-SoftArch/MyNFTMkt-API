@@ -8,8 +8,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.List;
+import java.util.Optional;
 
 public class NFTOwnerStepDefs {
 
@@ -38,19 +41,17 @@ public class NFTOwnerStepDefs {
         }
     }
 
-    @When("I add the NFT with id {long}")
-    public void iAddTheNFTWithId(Long id) {
-        /*Optional<NFT> nft = Optional.of(new NFT());
+    @When("II add the NFT with id {long} to the owned by user {String}")
+    public void iAddTheNFTWithId(Long id, String user) throws Exception {
+        Optional<NFT> nft = Optional.of(new NFT());
         nft = nftRepository.findById(id);
-        JSONObject newNFT = new JSONObject();
-        newNFT.put("favoriteNFTs", nft);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
-                        patch("/users/{username}", username)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(String.valueOf(newNFT))
+                        put("/nFTs/{id}/owner", user)
+                                .contentType("text/uri")
+                                .content(nft.get().getUri())
                                 .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());*/
+                .andDo(print());
     }
 
     @And("It has been added a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to owned NFTs of user with the username {string}")
@@ -62,7 +63,7 @@ public class NFTOwnerStepDefs {
     }
 
     @When("I remove the NFT with id {int} from the favorites of user {string}")
-    public void iRemoveTheNFTWithIdFromTheFavoritesOfUser(int arg0, String arg1) {
+    public void iRemoveTheNFTWithIdFromTheOwnedOfUser(int arg0, String arg1) {
     }
 
     @And("It has been removed a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} from owned NFTs of user with the username {string}")
