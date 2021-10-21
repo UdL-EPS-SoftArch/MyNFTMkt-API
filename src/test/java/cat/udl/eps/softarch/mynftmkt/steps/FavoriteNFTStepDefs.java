@@ -12,6 +12,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
         import org.springframework.security.crypto.password.PasswordEncoder;
         import org.springframework.test.web.servlet.ResultMatcher;
+        import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
         import org.springframework.transaction.annotation.Transactional;
 
         import java.util.Arrays;
@@ -57,7 +58,7 @@ public class FavoriteNFTStepDefs {
     public void iAddTheNFTWithIdToTheFavoritesOfUser(Long id, String username) throws Exception {
         Optional<NFT> nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
-                        put("/users/{username}/favoriteNFTs", username)
+                        patch("/users/{username}/favoriteNFTs", username)
                                 .contentType("text/uri-list")
                                 .content(nft.get().getUri())
                                 .with(AuthenticationStepDefs.authenticate()))
@@ -103,5 +104,18 @@ public class FavoriteNFTStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$._embedded.nFTs").isEmpty());
+    }
+
+    @And("The favorite list of user {string} contains the NFTs with id {int} and id {int}")
+    public void theFavoriteListOfUserContainsTheNFTsWithIdAndId(String username, int id1, int id2) throws Exception {
+        String path1 = "/nFTs/" + id1;
+        String path2 = "/nFTs/" + id2;
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}/favoriteNFTs", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path2)))
+                .andExpect(jsonPath("$._embedded.nFTs[1].uri", is(path1)));
     }
 }
