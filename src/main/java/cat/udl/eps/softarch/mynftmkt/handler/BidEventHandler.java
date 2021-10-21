@@ -34,11 +34,10 @@ public class BidEventHandler {
         bid.setBidder(user);
         if (bid.getOffer() instanceof FixedPriceOffer ){
             FixedPriceOffer offer = (FixedPriceOffer) bid.getOffer();
-            if(!bid.getPrice().equals(offer.getPrice())) {
+            if(bid.getPrice().compareTo(offer.getPrice()) != 0 && bid.getPrice().compareTo(new BigDecimal("0.01")) >= 0 ) {
                 throw new UnmatchingPricesException();
             }
         }
-        bidRepository.save(bid);
     }
 
     @HandleBeforeSave

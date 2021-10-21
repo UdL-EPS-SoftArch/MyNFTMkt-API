@@ -39,20 +39,19 @@ public class BidStepDefs {
 
     @And("^There is an fixed NFT offer with a price of \"([^\"]*)\"$")
     public void existsNFTOffer(BigDecimal price) throws Throwable {
-        offer = new FixedPriceOffer();
-        offer.setPrice(price);
-        offer = fixedPriceOfferRepository.save(offer);
+            offer = new FixedPriceOffer();
+            offer.setPrice(price);
+            offer = fixedPriceOfferRepository.save(offer);
     }
 
     @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer created$")
     public void makeBid(BigDecimal price) throws Throwable {
         Bid bid = new Bid();
         bid.setPrice(price);
-        bid.setBidder(userRepository.findById(AuthenticationStepDefs.currentUsername).get());
         bid.setOffer(offer);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/bids")
-                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
                                 .content(new JSONObject(
                                         stepDefs.mapper.writeValueAsString(bid)
                                 ).toString())
