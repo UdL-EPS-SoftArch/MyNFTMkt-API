@@ -44,7 +44,8 @@ Feature: Create an Offer with a Fixed Price
   Scenario: Create a Fixed Price Offer with an already linked NFT to another offer
     Given There is a registered user with username "newuser" and password "password" and email "newuser@sample.app"
     And There is no registered NFT with id 1
+    And I register a new NFT with title "pepito", description "pepito es un grande", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
     And I login as "newuser" with password "password"
     And I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito"
     When I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito"
-    Then The response code is 400
+    Then The response code is 403
