@@ -6,11 +6,14 @@ import io.cucumber.core.gherkin.Step;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import static org.hamcrest.Matchers.is;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +58,14 @@ public class NFTOwnerStepDefs {
     }
 
     @And("It has been added a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to owned NFTs of user with the username {string}")
-    public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(int arg0, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String arg7) {
+    public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String username) throws Exception {
+        String path = "/nFTs/" + id + "/" + username;
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/nFTs/{id}/owner", id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path)));
     }
 
     @And("There is a registered NFT with id {int}")
