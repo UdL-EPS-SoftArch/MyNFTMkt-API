@@ -10,3 +10,8 @@ Feature: Create an Offer
     Given I login as "admin" with password "password"
     When I create an offer with id 1
     Then The response code is 403
+
+  Scenario: Not allowed to create an offer as a user
+    Given I login as "user" with password "password"
+    When I create an offer with id 1
+    Then The response code is 403
