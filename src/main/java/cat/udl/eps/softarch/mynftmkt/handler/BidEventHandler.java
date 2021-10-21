@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.mynftmkt.domain.Bid;
 import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
 import cat.udl.eps.softarch.mynftmkt.domain.Offer;
 import cat.udl.eps.softarch.mynftmkt.domain.User;
+import cat.udl.eps.softarch.mynftmkt.exception.ForbiddenException;
 import cat.udl.eps.softarch.mynftmkt.exception.UnmatchingPricesException;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-
+import java.math.BigDecimal;
 
 @Component
 @RepositoryEventHandler
