@@ -1,16 +1,22 @@
 package cat.udl.eps.softarch.mynftmkt.handler;
 
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
+import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
+import cat.udl.eps.softarch.mynftmkt.domain.Offer;
+import cat.udl.eps.softarch.mynftmkt.domain.User;
+import cat.udl.eps.softarch.mynftmkt.exception.ForbiddenException;
+import cat.udl.eps.softarch.mynftmkt.exception.UnmatchingPricesException;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-
+import java.math.BigDecimal;
 
 @Component
 @RepositoryEventHandler
@@ -19,11 +25,21 @@ public class BidEventHandler {
 
 
     final BidRepository bidRepository;
-    
+
     public BidEventHandler(BidRepository bidRepository) {this.bidRepository = bidRepository;}
 
     @HandleBeforeCreate
-    public void handleBidPreCreate(Bid bid) { logger.info("Before creating: {}", bid.toString()); }
+    public void handleBidPreCreate(Bid bid) {
+        logger.info("Before creating: {}", bid.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        bid.setBidder(user);
+        if (bid.getOffer() instanceof FixedPriceOffer ){
+            FixedPriceOffer offer = (FixedPriceOffer) bid.getOffer();
+            if(bid.getPrice().compareTo(offer.getPrice()) != 0 && bid.getPrice().compareTo(new BigDecimal("0.01")) >= 0 ) {
+                throw new UnmatchingPricesException();
+            }
+        }
+    }
 
     @HandleBeforeSave
     public void handleBidPreSave(Bid bid) {

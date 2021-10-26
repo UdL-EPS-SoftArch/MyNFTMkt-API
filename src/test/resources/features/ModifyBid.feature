@@ -5,11 +5,12 @@ Feature: Modify a Bid
 
   Background:
     Given There is a registered user with username "buyer1" and password "password" and email "buyer1@sample.app"
+    And There is an fixed NFT offer with a price of "2.0"
     #TODO And There is an NFT offer made by "seller1"
   
     Scenario: forbid user from deleting bids
       Given I login as "buyer1" with password "password"
-      And I make a bid with a price of "2.0" for the NFT offer
+      And I make a bid with a price of "2.0" for the NFT offer created
       When I try to delete the bid
       Then The response code is 403
       And The error message is "Forbidden"
