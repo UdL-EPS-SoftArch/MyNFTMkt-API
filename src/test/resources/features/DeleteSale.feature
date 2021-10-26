@@ -4,7 +4,7 @@ Feature: Delete sale
 
   Background:
     Given I login as "admin" with password "password"
-    And I make a bid with a price of "10.0" for the NFT offer
+    And I make a bid with a price of "10.0" for the NFT offer created
     And I create a new sale with the previous bid
 
   Scenario: Admin deletes a sale

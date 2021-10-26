@@ -16,7 +16,7 @@ Feature: Crate sale
 
   Scenario: Create new sale with relationed bid
     Given I login as "admin" with password "password"
-    And I make a bid with a price of "10.0" for the NFT offer
+    And I make a bid with a price of "10.0" for the NFT offer created
     When I create a new sale with the previous bid
     Then The response code is 201
     And It has been created a new sale
