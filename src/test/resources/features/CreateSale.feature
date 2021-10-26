@@ -1,4 +1,4 @@
-Feature: Crate sale
+Feature: Create sale
   As a user
   I want to create a sale
 
@@ -10,7 +10,8 @@ Feature: Crate sale
 
   Scenario: Create new sale
     Given I login as "admin" with password "password"
-    When I create a new sale
+    And I make a bid with a price of "10.0" for the NFT offer created
+    When I create a new sale with the previous bid
     Then The response code is 201
     And It has been created a new sale
 
