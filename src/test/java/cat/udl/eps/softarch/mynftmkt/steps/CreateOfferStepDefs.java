@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 
+import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
 import cat.udl.eps.softarch.mynftmkt.domain.Offer;
 import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
@@ -21,9 +22,9 @@ public class CreateOfferStepDefs {
     CreateOfferStepDefs(StepDefs stepDefs) {
         this.stepDefs = stepDefs;
     }
-    @When("I create an offer with id {long}")
+    @When("I create a fixed price offer with id {long}")
     public void iCreateAnOfferWithId(Long id) throws Exception {
-        Offer offer = new Offer();
+        Offer offer = new FixedPriceOffer();
         offer.setId(id);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/offers")
