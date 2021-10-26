@@ -4,9 +4,9 @@ Feature: Retrieve Sale
 
   Background:
     Given I login as "admin" with password "password"
-    And I make a bid with a price of "10.0" for the NFT offer
+    And I make a bid with a price of "10.0" for the NFT offer created
     And I create a new sale with the previous bid
-    And I make a bid with a price of "5.0" for the NFT offer
+    And I make a bid with a price of "5.0" for the NFT offer created
     And I create a new sale with the previous bid
 
   Scenario: Retrieve all sale
