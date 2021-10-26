@@ -13,6 +13,6 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface FixedPriceOfferRepository extends PagingAndSortingRepository<FixedPriceOffer, Long> {
-    public List<FixedPriceOffer> findByPriceIsLessThanEqual(@Param("price") BigDecimal price);
+    public List<FixedPriceOffer> findAllByPriceIsLessThanEqual(@Param("price") BigDecimal price);
 
 }
