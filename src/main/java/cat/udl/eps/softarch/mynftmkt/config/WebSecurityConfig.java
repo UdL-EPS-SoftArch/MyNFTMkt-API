@@ -37,6 +37,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                 //Only admin and author can delete-cancel a fixed Price offer, but we don't know the author yet
                 .antMatchers(HttpMethod.DELETE, "/fixedPriceOffers/*").denyAll()
 
+                // Nobody can create an offer
+                .antMatchers(HttpMethod.POST, "/offers").denyAll()
+
                 .antMatchers(HttpMethod.DELETE, "/bids/*").denyAll()
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()

@@ -5,15 +5,7 @@ import cat.udl.eps.softarch.mynftmkt.exception.ForbiddenException;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.rest.core.annotation.HandleAfterCreate;
-import org.springframework.data.rest.core.annotation.HandleAfterDelete;
-import org.springframework.data.rest.core.annotation.HandleAfterLinkSave;
-import org.springframework.data.rest.core.annotation.HandleAfterSave;
-import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
-import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
-import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
-import org.springframework.data.rest.core.annotation.HandleBeforeSave;
-import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.data.rest.core.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -70,6 +62,18 @@ public class UserEventHandler {
     @HandleBeforeLinkSave
     public void handleUserPreLinkSave(User player, Object o) {
         logger.info("Before linking: {} to {}", player.toString(), o.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean sameId = user.getId().equals(player.getId());
+        boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        if (!sameId & !rolePlayerIsAdmin){
+            throw new ForbiddenException();
+        }
+    }
+
+    @HandleBeforeLinkDelete
+    public void handleUserPreLinkDelete(User player, Object o) {
+        logger.info("Before linked deleting: {} to {}", player.toString(), o.toString());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         boolean sameId = user.getId().equals(player.getId());

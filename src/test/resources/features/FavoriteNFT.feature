@@ -45,3 +45,9 @@ Feature: Favorite NFT
     And There is a registered NFT with id 1 in the list of favorites of user "user"
     When I add the NFT with id 1 to the favorites of user "user"
     Then It has not been added an NFT with id 1 to the list of favorites of user "user"
+
+  Scenario: A user wants to delete one NFT to the favorites of an other user
+    Given I login as "user" with password "password"
+    And There is a registered NFT with id 1 in the list of favorites of user "user2"
+    When I remove the NFT with id 1 from the favorites of user "user2"
+    Then The response code is 403
