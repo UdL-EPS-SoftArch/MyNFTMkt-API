@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
 import cat.udl.eps.softarch.mynftmkt.domain.User;
 import cat.udl.eps.softarch.mynftmkt.repository.AdminRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.FixedPriceOfferRepository;
+import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,6 +13,7 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.net.http.HttpResponse;
 
@@ -30,18 +32,21 @@ public class CreationFixedPriceOffer {
     final UserRepository userRepository;
     final AdminRepository adminRepository;
     final FixedPriceOfferRepository fixedPriceOfferRepository;
+    final NFTRepository nftRepository;
+    FixedPriceOffer offer = new FixedPriceOffer();
 
-    CreationFixedPriceOffer(StepDefs stepDefs, UserRepository userRepository, AdminRepository adminRepository, FixedPriceOfferRepository fixedPriceOfferRepository) {
+    CreationFixedPriceOffer(StepDefs stepDefs, UserRepository userRepository, AdminRepository adminRepository, FixedPriceOfferRepository fixedPriceOfferRepository, NFTRepository nftRepository) {
         this.stepDefs = stepDefs;
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.fixedPriceOfferRepository = fixedPriceOfferRepository;
+        this.nftRepository = nftRepository;
     }
 
 
     @When("^It has created a Fixed Price Offer with the price at ([\\d-.]+)$")
     public void saveNewPrice(BigDecimal newPrice) throws Throwable {
-        FixedPriceOffer offer = new FixedPriceOffer();
+        //FixedPriceOffer offer = new FixedPriceOffer();
         offer.setPrice(newPrice);
 
 
@@ -53,6 +58,28 @@ public class CreationFixedPriceOffer {
                                 ).put("price", newPrice).toString())
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+
+    }
+
+    @When("^I create a Fixed Price Offer with the price at ([\\d-.]+) of the NFT \"([^\"]*)\"$")
+    @Transactional
+    public void saveNewPrice(BigDecimal newPrice, String title) throws Throwable {
+        //FixedPriceOffer offer = new FixedPriceOffer();
+        offer.setPrice(newPrice);
+        offer.setNft(nftRepository.findByTitle(title));
+
+        System.out.print("NFT AGAFAT:" + offer.getNft());
+
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/fixedPriceOffers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content( stepDefs.mapper.writeValueAsString(offer))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
@@ -101,8 +128,17 @@ public class CreationFixedPriceOffer {
     }
 
 
-
-
+    @Then("^The offer NFT matches the NFT \"([^\"]*)\"$")
+    public void checkPrice(String name) throws Throwable{
+        System.out.print(newResourcesUri);
+        stepDefs.result  = stepDefs.mockMvc.perform(
+                get(newResourcesUri+"/nft/")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is(name)))
+                .andDo(print());
+    }
 
 
 
