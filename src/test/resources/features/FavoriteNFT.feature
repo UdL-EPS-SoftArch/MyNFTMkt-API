@@ -40,4 +40,8 @@ Feature: Favorite NFT
     When I add the NFT with id 1 to the favorites of user "user2"
     Then The response code is 403
 
-
+  Scenario: Add an NFT to the favorites of user who already has this one in his list
+    Given I login as "user" with password "password"
+    And There is a registered NFT with id 1 in the list of favorites of user "user"
+    When I add the NFT with id 1 to the favorites of user "user"
+    Then It has not been added an NFT with id 1 to the list of favorites of user "user"
