@@ -1,6 +1,9 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
+import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
+import cat.udl.eps.softarch.mynftmkt.repository.FixedPriceOfferRepository;
+import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import org.json.JSONObject;
@@ -14,26 +17,38 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class BidStepDefs {
     final StepDefs stepDefs;
     final BidRepository bidRepository;
+    final UserRepository userRepository;
+    final FixedPriceOfferRepository fixedPriceOfferRepository;
 
     private String newResourceUri;
+    private FixedPriceOffer offer;
 
 
-    BidStepDefs(StepDefs stepDefs, BidRepository bidRepository) {
+    BidStepDefs(StepDefs stepDefs, BidRepository bidRepository, UserRepository userRepository, FixedPriceOfferRepository fixedPriceOfferRepository) {
         this.stepDefs = stepDefs;
         this.bidRepository = bidRepository;
-        //TODO Repositories
+        this.userRepository = userRepository;
+        this.fixedPriceOfferRepository = fixedPriceOfferRepository;
     }
 
-    @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer$")
+
+    @And("^There is an fixed NFT offer with a price of \"([^\"]*)\"$")
+    public void existsNFTOffer(BigDecimal price) throws Throwable {
+            offer = new FixedPriceOffer();
+            offer.setPrice(price);
+            offer = fixedPriceOfferRepository.save(offer);
+    }
+
+    @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer created$")
     public void makeBid(BigDecimal price) throws Throwable {
         Bid bid = new Bid();
         bid.setPrice(price);
+        bid.setOffer(offer);
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/bids")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -45,6 +60,17 @@ public class BidStepDefs {
                 .andDo(print());
         newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
     }
+
+    @And("^The bid is associated with \"([^\"]*)\"$")
+    public void TheBidIsAssociatedWith(String username) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get(newResourceUri+"/bidder")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(username)));
+    }
+
 
     @And("^It has been created a bid with a price of \"([^\"]*)\" for the NFT offer$")
     public void ItHasBeenCreatedABidWithAPrice(BigDecimal price) throws Throwable {
