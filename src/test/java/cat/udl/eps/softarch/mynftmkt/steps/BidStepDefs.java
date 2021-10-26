@@ -94,6 +94,11 @@ public class BidStepDefs {
                 .andExpect(jsonPath("$.status", is(Bid.StatusTypes.valueOf(status).toString())));
     }
 
+    @And("^A sale has been created and associated with the bid$")
+    public void SaleHasBeenCreated() throws Throwable {
+        //TODO
+    }
+
     @When("^I try to delete the bid$")
     public void deleteBid() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(

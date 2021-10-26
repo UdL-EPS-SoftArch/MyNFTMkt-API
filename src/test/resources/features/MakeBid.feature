@@ -15,6 +15,7 @@ Feature: Make a Bid
     And It has been created a bid with a price of "2.0" for the NFT offer
     And The status of the bid is "ACTIVE"
     And The bid is associated with "buyer1"
+    And A sale has been created and associated with the bid
 
   Scenario: Make a new bid without being logged in
     Given I'm not logged in

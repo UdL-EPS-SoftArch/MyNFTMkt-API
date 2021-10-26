@@ -30,7 +30,7 @@ public class Bid extends UriEntity<Long> {
     @DecimalMin("0.01")
     private BigDecimal price;
 
-    public enum StatusTypes {ACTIVE, PURCHASED, CANCELLED}
+    public enum StatusTypes {ACTIVE, PURCHASED, SURPASSED}
 
     private StatusTypes status;
 
