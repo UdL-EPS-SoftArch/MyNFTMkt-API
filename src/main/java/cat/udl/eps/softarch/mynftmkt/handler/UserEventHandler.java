@@ -70,6 +70,13 @@ public class UserEventHandler {
     @HandleBeforeLinkSave
     public void handleUserPreLinkSave(User player, Object o) {
         logger.info("Before linking: {} to {}", player.toString(), o.toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> userAuthority = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean sameId = user.getId().equals(player.getId());
+        boolean rolePlayerIsAdmin = userAuthority.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        if (!sameId & !rolePlayerIsAdmin){
+            throw new ForbiddenException();
+        }
     }
 
     @HandleAfterCreate

@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+
 
 
 @Entity
@@ -32,9 +34,12 @@ public class Bid extends UriEntity<Long> {
 
     private StatusTypes status;
 
-    /*@ManyToOne
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Offer offer;
 
     @ManyToOne
-    private User createdBy;*/
+    @JsonIdentityReference(alwaysAsId = true)
+    private User bidder;
+
 }
