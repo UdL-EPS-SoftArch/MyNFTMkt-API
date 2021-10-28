@@ -16,6 +16,8 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.net.http.HttpResponse;
 import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -29,7 +31,7 @@ public class FindByPriceSteps {
     final UserRepository userRepository;
     final AdminRepository adminRepository;
     final FixedPriceOfferRepository fixedPriceOfferRepository;
-    FixedPriceOffer offer = new FixedPriceOffer();
+
 
     FindByPriceSteps(StepDefs stepDefs, UserRepository userRepository, AdminRepository adminRepository, FixedPriceOfferRepository fixedPriceOfferRepository, NFTRepository nftRepository) {
         this.stepDefs = stepDefs;
@@ -38,13 +40,19 @@ public class FindByPriceSteps {
         this.fixedPriceOfferRepository = fixedPriceOfferRepository;
     }
     @When("^I search by price smaller or equal than ([\\d-.]+)$")
-    public void searchByPrice(BigDecimal priceToSearch){
-        fixedPriceOffersList=fixedPriceOfferRepository.findAllByPriceIsLessThanEqual(priceToSearch);
+    public void searchByPrice(BigDecimal priceToSearch)throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/fixedPriceOffers/search/findAllByPriceIsLessThanEqual?price={priceToSearch}",priceToSearch)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
+       // fixedPriceOffersList=fixedPriceOfferRepository.findAllByPriceIsLessThanEqual(priceToSearch);
+
     @Then("^I receive a list with (\\d+) items$")
     public void checkListOfPriceSize (int size) throws Throwable{
-        System.out.print(fixedPriceOffersList.get(0).getPrice());
-        assertEquals(size,fixedPriceOffersList.size());
+        stepDefs.result.andExpect(jsonPath("$._embedded.fixedPriceOffers", hasSize(size)));
+        //assertEquals(size,fixedPriceOffersList.size());
     }
 
 }
