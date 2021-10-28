@@ -13,7 +13,7 @@ Feature: Make a Bid
     When I make a bid with a price of "2.0" for the NFT offer created
     Then The response code is 201
     And It has been created a bid with a price of "2.0" for the NFT offer
-    And The status of the bid is "ACTIVE"
+    And The status of the bid is "PURCHASED"
     And The bid is associated with "buyer1"
     And A sale has been created and associated with the bid
 

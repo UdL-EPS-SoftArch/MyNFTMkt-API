@@ -86,7 +86,6 @@ public class BidEventHandler {
         }
         bidRepository.save(bid);
         //TODO check all the bids, search for the ACTIVE and change the previous one to SURPASSED
-        //TODO create sale after changing status to purchased
     }
 
     @HandleAfterSave
