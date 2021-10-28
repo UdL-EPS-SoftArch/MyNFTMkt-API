@@ -11,5 +11,5 @@ Feature: Create an Offer with a Declining Price
 
   Scenario: Create a new Declining Price Offer
     Given I login as "admin" with password "password"
-    When I create a Declining Price Offer with an starting price at "1.0", an ending price at "1000.0" and an expiration to "30" days
+    When I create a Declining Price Offer with an starting price at "1.0", an ending price at "1000.0" and an expiration to "30" days with the previous NFT.
     Then The response code is 201
