@@ -21,8 +21,10 @@ public class UpdateSaleStepDefs {
 
     @When("I change the date of the sale with id {string} to {string}")
     public void iChangeTheDateOfTheSaleWithIdTo(String id, String newDate) throws Throwable {
+        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        assert id != null;
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/sales/"+ id)
+                patch("/sales/"+ id.substring(id.lastIndexOf("/")+1))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content((new JSONObject().put("dateTime", ZonedDateTime.parse(newDate))).toString())
                         .accept(MediaType.APPLICATION_JSON)

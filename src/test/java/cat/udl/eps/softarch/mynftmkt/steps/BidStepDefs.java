@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.jupiter.api.AssertionsKt;
 import org.springframework.http.MediaType;
+
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -52,6 +54,7 @@ public class BidStepDefs {
     }
 
     @When("^I make a bid with a price of \"([^\"]*)\" for the NFT offer created$")
+    @Transactional
     public void makeBid(BigDecimal price) throws Throwable {
         Bid bid = new Bid();
         bid.setPrice(price);

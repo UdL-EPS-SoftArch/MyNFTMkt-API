@@ -34,6 +34,7 @@ public class ModifyUserStepDefs {
             user.setPassword(password);
             user.setName(name);
             user.setLastname(lastname);
+            user.setCurrency("euro");
             user.encodePassword();
             userRepository.save(user);
         }
