@@ -1,16 +1,12 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 
 import cat.udl.eps.softarch.mynftmkt.domain.Sale;
+import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.SaleRepository;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.springframework.http.MediaType;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,14 +18,15 @@ public class CreateSaleStepDefs {
 
     final  StepDefs stepDefs;
     final  SaleRepository saleRepository;
+    final  BidRepository bidRepository;
 
     public static String id;
 
-    public CreateSaleStepDefs(StepDefs stepDefs, SaleRepository saleRepository) {
+    public CreateSaleStepDefs(StepDefs stepDefs, SaleRepository saleRepository, BidRepository bidRepository) {
 
         this.stepDefs = stepDefs;
         this.saleRepository = saleRepository;
-
+        this.bidRepository = bidRepository;
     }
 
     @When("^I create a new sale$")
@@ -59,5 +56,19 @@ public class CreateSaleStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @When("I create a new sale with the previous bid")
+    public void iCreateANewSaleWithThePreviousBid() throws Exception {
+        itHasBeenCreatedANewSale();
+        Sale sale = new Sale();
+        sale.setBidSale(bidRepository.findById(Long.parseLong(id.substring(id.lastIndexOf("/")+1))).get());
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/sales")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(stepDefs.mapper.writeValueAsString(sale))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
