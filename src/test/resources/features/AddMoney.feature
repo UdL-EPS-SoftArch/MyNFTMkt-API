@@ -8,6 +8,6 @@ Feature: Add money
 
   Scenario: Add money to the user
     Given I login as "user" with password "password"
-    When I add balance 5 to the user "user"
+    When I add "5.0" money to the user "user"
     Then The response code is 204
-    And It has been added a balance 5 to the user "user"
+    And It has been added a balance "5.0" to the user "user"
