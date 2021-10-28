@@ -35,6 +35,27 @@ Feature: Make a Bid
     Then The response code is 400
     And The error message is "Bid's price should match the offer's price"
 
+  Scenario: forbid user from deleting bids
+    Given I login as "buyer1" with password "password"
+    And I make a bid with a price of "2.0" for the NFT offer created
+    When I try to delete the bid
+    Then The response code is 403
+    And The error message is "Forbidden"
+
+  Scenario: forbid user from modifying bids by patch
+    Given I login as "buyer1" with password "password"
+    And I make a bid with a price of "2.0" for the NFT offer created
+    When I try to modify the bid by doing a patch
+    Then The response code is 403
+    And The error message is "Forbidden"
+
+  Scenario: forbid user from modifying bids by put
+    Given I login as "buyer1" with password "password"
+    And I make a bid with a price of "2.0" for the NFT offer created
+    When I try to modify the bid by doing a put
+    Then The response code is 403
+    And The error message is "Forbidden"
+
 
 
 

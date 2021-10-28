@@ -116,6 +116,26 @@ public class BidStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
+
+    @When("^I try to modify the bid by doing a put$")
+    public void ITryToModifyTheBidPut() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        put(newResourceUri)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("^I try to modify the bid by doing a patch$")
+    public void ITryToModifyTheBidPatch() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        patch(newResourceUri)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }
 
 
