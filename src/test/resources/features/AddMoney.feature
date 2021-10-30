@@ -3,23 +3,30 @@ Feature: Add money
   I want to control who can add money
 
   Background:
-    Given There is a registered user with username "admin" and password "password" and email "admin@sample.app"
+    Given There is a registered administrator with username "admin" and password "password" and email "admin@sample.app"
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
     Given There is a registered user with username "user2" and password "password2" and email "user2@sample.app"
 
-  Scenario: Add money to the user
+  Scenario: Add money to a user with no balance
     Given I login as "user" with password "password"
-    And Given a user "user" has a balance of "0.0"
+    And User "user" has a balance of "0.0"
     When I add "5.0" money to the user "user"
     Then The response code is 200
     And It has been added a balance "5.0" to the user "user"
+
+  Scenario: Add money to a user with balance
+    Given I login as "user" with password "password"
+    And User "user" has a balance of "5.0"
+    When I add "5.0" money to the user "user"
+    Then The response code is 200
+    And It has been added a balance "10.0" to the user "user"
 
   Scenario: Add money to a non-existing user
     Given I login as "user" with password "password"
     When I add "5.0" money to the user "user420"
     Then The response code is 404
 
-  Scenario: A user wants to add money to the other user
+  Scenario: User wants to add money another user
     Given I login as "user" with password "password"
     When I add "5.0" money to the user "user2"
     Then The response code is 403
@@ -30,6 +37,8 @@ Feature: Add money
     When I retract "4.0" money from the user "user"
     Then the response code is 204
     And It has been retracted "4.0" money from the user "user"
+
+
 
 
 

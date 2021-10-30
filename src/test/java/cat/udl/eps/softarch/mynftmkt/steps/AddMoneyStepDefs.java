@@ -46,12 +46,15 @@ public class AddMoneyStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
-    @And("Given a user {string} has a balance of {string}")
-    public void givenAUserHasABalanceOf(String username, String balance) {
+    @And("User {string} has a balance of {string}")
+    public void aUserHasABalanceOf(String username, String balance) {
+        BigDecimal currentBalance = new BigDecimal(balance);
         User user = userRepository.findById(username).orElse(new User()); // orElse is a non-exception get() method
 
-        Assert.assertEquals("user \""
-                + username + "\"should have a balance of 0", 0, user.getBalance().compareTo(BigDecimal.ZERO));
+        user.setBalance(currentBalance);
+        userRepository.save(user);
+        /*Assert.assertEquals("user \""
+                + username + "\"should have a balance of ", 0, user.getBalance().compareTo(currentBalance));*/
     }
     @And("It has been added a balance {string} to the user {string}")
     public void itHasBeenAddedABalanceToTheUser(String bigDecimal, String username) throws Exception {
