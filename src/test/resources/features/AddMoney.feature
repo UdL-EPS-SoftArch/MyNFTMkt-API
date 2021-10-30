@@ -9,8 +9,9 @@ Feature: Add money
 
   Scenario: Add money to the user
     Given I login as "user" with password "password"
+    And Given a user "user" has a balance of "0.0"
     When I add "5.0" money to the user "user"
-    Then The response code is 204
+    Then The response code is 200
     And It has been added a balance "5.0" to the user "user"
 
   Scenario: Add money to a non-existing user
