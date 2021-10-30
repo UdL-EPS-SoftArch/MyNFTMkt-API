@@ -40,7 +40,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
     private String lastname;
 
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
