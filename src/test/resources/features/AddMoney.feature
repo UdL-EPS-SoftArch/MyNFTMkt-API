@@ -15,8 +15,8 @@ Feature: Add money
     And It has been added a balance "5.0" to the user "user"
 
   Scenario: Add money to a non-existing user
-    Given I login as "admin" with password "password"
-    When I add "5.0" money to the user "user2"
+    Given I login as "user" with password "password"
+    When I add "5.0" money to the user "user420"
     Then The response code is 404
 
   Scenario: A user wants to add money to the other user
