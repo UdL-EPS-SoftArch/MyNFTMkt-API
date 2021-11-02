@@ -119,15 +119,13 @@ public class FavoriteNFTStepDefs {
                 .andExpect(jsonPath("$._embedded.nFTs[1].uri", is(path1)));
     }
 
-    @Then("It has not been added an NFT with id {long} to the list of favorites of user {string}")
-    public void itHasNotBeenAddedAnNFTWithIdToTheListOfFavoritesOfUser(Long id, String username) throws Exception {
-            String path = "/nFTs/" + id;
-            stepDefs.result = stepDefs.mockMvc.perform(
-                            get("/users/{username}/favoriteNFTs", username)
-                                    .accept(MediaType.APPLICATION_JSON)
-                                    .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print())
-                    .andExpect(jsonPath("$._embedded.nFTs", hasSize(1) ))
-                    .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path)));
+    @Then("The size of the list of user {string} is {int}")
+    public void theSizeOfTheListOfUserIs(String username, int size) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}/favoriteNFTs", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$._embedded.nFTs", hasSize(size)));
     }
 }
