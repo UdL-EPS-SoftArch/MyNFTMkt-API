@@ -36,8 +36,8 @@ public class CreateDecliningPriceOfferStepDefs {
                 .andDo(print())
                 .andExpect(status().isOk());
         DecliningPriceOffer dpo = new DecliningPriceOffer();
-        dpo.setStartingPrice(BigDecimal.valueOf(Long.parseLong(starting)));
-        dpo.setEndingPrice(BigDecimal.valueOf(Long.parseLong(ending)));
+        dpo.setStartingPrice(new BigDecimal(starting));
+        dpo.setEndingPrice(new BigDecimal(ending));
         ZonedDateTime zdt = ZonedDateTime.now();
         dpo.setNft(nftRepository.findById(Long.parseLong(id.substring(id.lastIndexOf("/")+1))).get());
         stepDefs.result = stepDefs.mockMvc.perform(
