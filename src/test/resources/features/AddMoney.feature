@@ -26,19 +26,15 @@ Feature: Add money
     When I add "5.0" money to the user "user420"
     Then The response code is 404
 
-  Scenario: User wants to add money another user
+  Scenario: User wants to add money to another user
     Given I login as "user" with password "password"
     When I add "5.0" money to the user "user2"
     Then The response code is 403
 
-  Scenario: Retract money from the user
-    Given I login as "user" with password "password"
-    And I have more than "5.0" money
-    When I retract "4.0" money from the user "user"
-    Then the response code is 204
-    And It has been retracted "4.0" money from the user "user"
-
-
+  Scenario: Administrator wants to add money to a user
+    Given I login as "admin" with password "password"
+    When I add "5.0" money to the user "user"
+    Then The response code is 200
 
 
 
