@@ -19,12 +19,18 @@ Feature: FindByPrice
     And I register a new NFT with title "pepito5", description "pepito es un grande", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
     And I create a Fixed Price Offer with the price at 100.0. of the NFT "pepito5"
     And I register a new NFT with title "pepito6", description "pepito es un grande", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
-    And I create a Fixed Price Offer with the price at 1.0. of the NFT "pepito6"
+    And I create a Fixed Price Offer with the price at 10.0. of the NFT "pepito6"
 
 
 
-  Scenario: You can search by price
-    When I search by price smaller or equal than 50.0
-    Then I receive a list with 6 items
+  Scenario Outline: You can search by price
+    When I search by price smaller or equal than <price>
+    Then I receive a list with <items> items
+    Examples:
+    |price|items|
+    |50.0|6     |
+    |100.0|7    |
+    |1.0  |1    |
+    |0.5  |0    |
 
 
