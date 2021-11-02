@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
 import cat.udl.eps.softarch.mynftmkt.domain.DecliningPriceOffer;
 import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
 import io.cucumber.java.en.When;
+import org.json.JSONObject;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
@@ -26,8 +27,8 @@ public class CreateDecliningPriceOfferStepDefs {
     }
 
 
-    @When("I create a Declining Price Offer with an starting price at {string}, an ending price at {string} and an expiration to {string} days with the previous NFT.")
-    public void iCreateADecliningPriceOfferWithAnStartingPriceAtAnEndingPriceAtAndAnExpirationToDaysWithThePreviousNFT(String starting, String ending, String expiration) throws Exception {
+    @When("I create a Declining Price Offer with an starting price at ([\\d-.]+), an ending price at ([\\d-.]+) and an expiration to \"([^\"]*)\" days with the previous NFT.$")
+    public void iCreateADecliningPriceOfferWithAnStartingPriceAtAnEndingPriceAtAndAnExpirationToDaysWithThePreviousNFT(BigDecimal starting, BigDecimal ending, String expiration) throws Exception {
         id = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
                         get(id)
@@ -35,17 +36,27 @@ public class CreateDecliningPriceOfferStepDefs {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(status().isOk());
-        DecliningPriceOffer dpo = new DecliningPriceOffer();
-        dpo.setStartingPrice(BigDecimal.valueOf(Long.parseLong(starting)));
-        dpo.setEndingPrice(BigDecimal.valueOf(Long.parseLong(ending)));
         ZonedDateTime zdt = ZonedDateTime.now();
-        dpo.setNft(nftRepository.findById(Long.parseLong(id.substring(id.lastIndexOf("/")+1))).get());
         stepDefs.result = stepDefs.mockMvc.perform(
                         post("/decliningPriceOffers")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(stepDefs.mapper.writeValueAsString(dpo))
+                                .content(new JSONObject().put("startingPrice", starting).toString())
+                                .content(new JSONObject().put("endingPrice", ending).toString())
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
+
+    @When("^I create a Declining Price Offer with negative price ([\\d-.]+)$")
+    public void iCreateADecliningPriceOfferWithNegativePrice(BigDecimal incorrectPrice) throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/decliningPriceOffers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new JSONObject().put("startingPrice", incorrectPrice).toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+    }
+
 }
