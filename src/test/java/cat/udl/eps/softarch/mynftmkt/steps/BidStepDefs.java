@@ -1,12 +1,16 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 import cat.udl.eps.softarch.mynftmkt.domain.Bid;
 import cat.udl.eps.softarch.mynftmkt.domain.FixedPriceOffer;
+import cat.udl.eps.softarch.mynftmkt.domain.Sale;
 import cat.udl.eps.softarch.mynftmkt.repository.BidRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.FixedPriceOfferRepository;
+import cat.udl.eps.softarch.mynftmkt.repository.SaleRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import org.json.JSONObject;
+import org.junit.Assert;
+import org.junit.jupiter.api.AssertionsKt;
 import org.springframework.http.MediaType;
 
 import javax.transaction.Transactional;
@@ -14,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -26,16 +31,18 @@ public class BidStepDefs {
     final BidRepository bidRepository;
     final UserRepository userRepository;
     final FixedPriceOfferRepository fixedPriceOfferRepository;
+    final SaleRepository saleRepository;
 
     private String newResourceUri;
     private FixedPriceOffer offer;
 
 
-    BidStepDefs(StepDefs stepDefs, BidRepository bidRepository, UserRepository userRepository, FixedPriceOfferRepository fixedPriceOfferRepository) {
+    BidStepDefs(StepDefs stepDefs, BidRepository bidRepository, UserRepository userRepository, FixedPriceOfferRepository fixedPriceOfferRepository, SaleRepository saleRepository) {
         this.stepDefs = stepDefs;
         this.bidRepository = bidRepository;
         this.userRepository = userRepository;
         this.fixedPriceOfferRepository = fixedPriceOfferRepository;
+        this.saleRepository = saleRepository;
     }
 
 
@@ -97,10 +104,36 @@ public class BidStepDefs {
                 .andExpect(jsonPath("$.status", is(Bid.StatusTypes.valueOf(status).toString())));
     }
 
+    @And("^A sale has been created and associated with the bid$")
+    public void SaleHasBeenCreated() throws Throwable {
+        List<Sale> sale = saleRepository.findByBidSale(bidRepository.findById(Long.valueOf(newResourceUri.split("/")[4])).get());
+        Assert.assertFalse(sale.isEmpty());
+    }
+
     @When("^I try to delete the bid$")
     public void deleteBid() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                         delete(newResourceUri)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("^I try to modify the bid by doing a put$")
+    public void ITryToModifyTheBidPut() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        put(newResourceUri)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("^I try to modify the bid by doing a patch$")
+    public void ITryToModifyTheBidPatch() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        patch(newResourceUri)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
