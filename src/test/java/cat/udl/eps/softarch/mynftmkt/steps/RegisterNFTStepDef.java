@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
 
 import cat.udl.eps.softarch.mynftmkt.domain.NFT;
 import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -43,8 +44,8 @@ public class RegisterNFTStepDef {
     @When("I register a new NFT with title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
     public void iRegisterANewNFTWithTitleDescriptionKeywordsCategoryMediaTypeAndContent(String title, String description,
                                                                                         String keywords, String category,
-                                                                                        String mediType, String content) 
-                                                                                        throws Throwable{
+                                                                                        String mediType, String content)
+            throws Throwable{
         NFT nft = new NFT();
         nft.setTitle(title);
         nft.setDescription(description);
@@ -68,7 +69,7 @@ public class RegisterNFTStepDef {
     public void itHasBeenCreatedANFTTitleDescriptionKeywordsCategoryMediaTypeAndContent(String title, String description,
                                                                                         String keywords, String category,
                                                                                         String mediType, String content)
-                                                                                        throws Throwable{
+            throws Throwable{
         stepDefs.result = stepDefs.mockMvc.perform(
                         get(newResourcesUri)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -77,4 +78,29 @@ public class RegisterNFTStepDef {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is(title)));
     }
+
+    @When("I register a new NFT with no title, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
+    public void iRegisterANewNFTWithNoTitleDescriptionKeywordsCategoryMediaTypeAndContent(String description,
+                                                                                          String keywords, String category,
+                                                                                          String mediType, String content) throws Exception {
+
+        NFT nft = new NFT();
+        nft.setDescription(description);
+        nft.setKeywords(List.of(keywords.split(",")));
+        nft.setCategory(category);
+        nft.setMediaType(mediType);
+        nft.setContent(content);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/nFTs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content( stepDefs.mapper.writeValueAsString(nft))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate())
+        ).andDo(print());
+
+        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+
+    }
 }
+
