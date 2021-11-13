@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "AcademicRecruitUser") //Avoid collision with system table User in Postgres
@@ -39,7 +41,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
     private String lastname;
 
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
@@ -52,6 +54,15 @@ public class User extends UriEntity<String> implements UserDetails {
     public void encodePassword() {
         this.password = passwordEncoder.encode(this.password);
     }
+
+    // Settings entity
+    @NotBlank
+    private String currency = "euro";
+
+    private Boolean darkMode;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<NFT> favoriteNFTs;
 
     @Override
     public String getId() {
