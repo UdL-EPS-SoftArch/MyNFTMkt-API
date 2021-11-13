@@ -43,8 +43,8 @@ public class RegisterNFTStepDef {
     @When("I register a new NFT with title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
     public void iRegisterANewNFTWithTitleDescriptionKeywordsCategoryMediaTypeAndContent(String title, String description,
                                                                                         String keywords, String category,
-                                                                                        String mediType, String content) 
-                                                                                        throws Throwable{
+                                                                                        String mediType, String content)
+            throws Throwable{
         NFT nft = new NFT();
         nft.setTitle(title);
         nft.setDescription(description);
@@ -68,7 +68,7 @@ public class RegisterNFTStepDef {
     public void itHasBeenCreatedANFTTitleDescriptionKeywordsCategoryMediaTypeAndContent(String title, String description,
                                                                                         String keywords, String category,
                                                                                         String mediType, String content)
-                                                                                        throws Throwable{
+            throws Throwable{
         stepDefs.result = stepDefs.mockMvc.perform(
                         get(newResourcesUri)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -77,4 +77,9 @@ public class RegisterNFTStepDef {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is(title)));
     }
+
+    @When("I register a new NFT with no title, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
+    public void iRegisterANewNFTWithNoTitleDescriptionKeywordsCategoryMediaTypeAndContent(String arg0, String arg1, String arg2, String arg3, String arg4) {
+    }
 }
+

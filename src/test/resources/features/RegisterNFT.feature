@@ -12,3 +12,9 @@ Feature: Register NFT
     When I register a new NFT with title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
     Then The response code is 201
     And It has been created a NFT title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
+
+  Scenario: Register new  invalid NFT
+    Given There is no registered NFT with id 1
+    And I login as "user" with password "password"
+    When I register a new NFT with no title, description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
+    Then The response code is 400

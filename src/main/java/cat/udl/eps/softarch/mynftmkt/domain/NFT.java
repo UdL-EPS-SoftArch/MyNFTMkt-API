@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.mynftmkt.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,6 +30,9 @@ public class NFT extends UriEntity<Long>{
 
     private String content;
 
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private User owner;
 
 
 }
