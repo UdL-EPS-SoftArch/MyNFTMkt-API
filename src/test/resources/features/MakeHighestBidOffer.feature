@@ -28,7 +28,7 @@ Feature: Make a Highest Bid NFT Offer
 
   Scenario: Create one Highest Bid NFT Offer + NTF
     When I register a new NFT with title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
-    And Select the NTF "title" .
+    And Select the NTF "title" for option Highest Bid NFT Offer .
     When I make Highest Bid NFT Offer I set a minimum price "5" and price to reserve "15" and select the expiration date "2022-11-03" .
     Then The response code is 201
     And The Highest Bid NFT Offer is associated with the NTF "title" .
