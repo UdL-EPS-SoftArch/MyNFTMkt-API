@@ -18,3 +18,11 @@ Feature: Register NFT
     And I login as "user" with password "password"
     When I register a new NFT with no title, description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
     Then The response code is 400
+
+Scenario: Register new NFT as unregistered user
+  Given There is no registered NFT with id 1
+  When I register a new NFT with title "title", description "description", keywords "<keyword>", category "category", mediaType "mediaType" and content "content"
+  Then The response code is 401
+
+
+
