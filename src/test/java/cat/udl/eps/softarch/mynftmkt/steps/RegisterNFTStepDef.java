@@ -2,6 +2,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
 
 import cat.udl.eps.softarch.mynftmkt.domain.NFT;
 import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -79,7 +80,27 @@ public class RegisterNFTStepDef {
     }
 
     @When("I register a new NFT with no title, description {string}, keywords {string}, category {string}, mediaType {string} and content {string}")
-    public void iRegisterANewNFTWithNoTitleDescriptionKeywordsCategoryMediaTypeAndContent(String arg0, String arg1, String arg2, String arg3, String arg4) {
+    public void iRegisterANewNFTWithNoTitleDescriptionKeywordsCategoryMediaTypeAndContent(String description,
+                                                                                          String keywords, String category,
+                                                                                          String mediType, String content) throws Exception {
+
+        NFT nft = new NFT();
+        nft.setDescription(description);
+        nft.setKeywords(List.of(keywords.split(",")));
+        nft.setCategory(category);
+        nft.setMediaType(mediType);
+        nft.setContent(content);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/nFTs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content( stepDefs.mapper.writeValueAsString(nft))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate())
+        ).andDo(print());
+
+        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+
     }
 }
 
