@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.zip.DataFormatException;
 
 @Component
@@ -47,6 +48,9 @@ public class HighestBidOfferEventHandler {
             if(highestBidOffer.getExpiration().compareTo(currentData) < 0){
                 throw new LowerDataException();
             }
+
+            ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+            highestBidOffer.setDateTime(date);
 
 
 

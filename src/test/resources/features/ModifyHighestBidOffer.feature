@@ -1,28 +1,28 @@
-Feature: Modify a Highest Bid NFT Offer
+Feature: Modify a Highest Bid Offer
 
   Background:
-    Given There is a registered user with username "user1" and password "password" and email "user1@sample.app"
-    Given I login as "user1" with password "password"
-    When I make Highest Bid NFT Offer I set a minimum price "5" and price to reserve "15" and select the expiration date "2022-11-03" .
+    Given There is a registered user with username "seller1" and password "password" and email "seller1@sample.app"
+    Given I login as "seller1" with password "password"
+    When I make Highest Bid Offer I set a minimum price "5" and price to reserve "15" and select the expiration date "2022-11-03" .
 
   Scenario: Modify a Highest Bid NFT Offer
-    When I modify Highest Bid NFT Offer with id "1" I set a minimum price "4" and price to reserve "12" and select the expiration date "2022-11-10" .
+    When I modify Highest Bid Offer with id "1" I set a minimum price "4" and price to reserve "12" and select the expiration date "2022-11-10" .
     Then The response code is 200
 
 
   Scenario: Modify a Highest Bid NFT Offer when not authenticated
     Given I'm not logged in
-    When I delete a sale with id "1"
+    When I modify Highest Bid Offer with id "1" I set a minimum price "4" and price to reserve "12" and select the expiration date "2022-11-10" .
     Then The response code is 401
 
 
   Scenario: Modify a Highest Bid NFT Offer that does not exist
-    And I login as "admin" with password "password"
-    When I delete a sale with id "3"
-    Then The response code is 404
+    Given I login as "user1" with password "password"
+    When I modify Highest Bid Offer with id "3" I set a minimum price "4" and price to reserve "12" and select the expiration date "2022-11-10" .
+    Then The response code is 403
 
   Scenario Outline: : Create one Highest Bid NFT Offer erro
-    When I modify Highest Bid NFT Offer with id "1" I set a minimum price "<minimumBid>" and price to reserve "<reservePrice>" and select the expiration date "<expiration>" .
+    When I modify Highest Bid Offer with id "1" I set a minimum price "<minimumBid>" and price to reserve "<reservePrice>" and select the expiration date "<expiration>" .
     Then The response code is 400
     And The error message is "<errorMessage>"
     Examples:
