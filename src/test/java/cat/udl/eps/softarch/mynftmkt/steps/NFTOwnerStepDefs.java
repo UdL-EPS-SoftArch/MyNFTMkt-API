@@ -33,11 +33,16 @@ public class NFTOwnerStepDefs {
     }
 
     @And("It has been added a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to owned NFTs of user with the username {string}")
-    public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(int arg0, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String arg7) {
-    }
+    public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String username) throws Exception {
 
-    @And("There is a registered NFT with id {int}")
-    public void thereIsARegisteredNFTWithId(int arg0) {
+        String path = "/nFTs/" + newResourcesUri + "/owner";
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/nFTs/{id}/owner", newResourcesUri)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.nFTs[0].uri/owner", is(username)));
+
     }
 
     @And("It has been removed a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} from owned NFTs of user with the username {string}")
@@ -60,14 +65,24 @@ public class NFTOwnerStepDefs {
         nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
-                        put("/nFTs/{id}/owner", user)
-                                .contentType("text/uri")
+                        put("/nFTs/{id}/owner", id, user)
+                                .contentType("text/uri-list")
                                 .content(nft.get().getUri())
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
+    }
+
+    @And("There is a registered NFT with id {int} and title {string}")
+    public void thereIsARegisteredNFTWithIdAndTitle(long id, String title) {
+        if (!nftRepository.existsById(id)) {
+            NFT nft = new NFT();
+            nft.setId(id);
+            nft.setTitle(title);
+            nftRepository.save(nft);
+        }
     }
 }
 
