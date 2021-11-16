@@ -55,7 +55,7 @@ public class NFTOwnerStepDefs {
     }
 
     @When("I add the NFT with id {int} to the owned by user {string}")
-    public void iAddTheNFTWithIdToTheOwnedByUser(Long id, String user) throws Exception {
+    public void iAddTheNFTWithIdToTheOwnedByUser(long id, String user) throws Exception {
         Optional<NFT> nft = Optional.of(new NFT());
         nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
