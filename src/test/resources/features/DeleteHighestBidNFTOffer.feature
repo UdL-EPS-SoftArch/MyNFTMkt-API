@@ -19,7 +19,7 @@ Feature: DELETE a Highest Bid Offer
 
 
   Scenario: Delete a Highest Bid NFT Offer that does not exist
-    Given I login as "user1" with password "password"
+    Given I login as "seller1" with password "password"
     When I remove a Higher Bid Offer with id "5" .
     Then The response code is 404
 

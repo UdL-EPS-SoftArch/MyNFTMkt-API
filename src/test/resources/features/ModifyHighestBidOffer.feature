@@ -17,11 +17,12 @@ Feature: Modify a Highest Bid Offer
 
 
   Scenario: Modify a Highest Bid NFT Offer that does not exist
-    Given I login as "user1" with password "password"
+    Given I login as "seller1" with password "password"
     When I modify Highest Bid Offer with id "3" I set a minimum price "4" and price to reserve "12" and select the expiration date "2022-11-10" .
     Then The response code is 403
 
   Scenario Outline: : Create one Highest Bid NFT Offer erro
+    Given I login as "seller1" with password "password"
     When I modify Highest Bid Offer with id "1" I set a minimum price "<minimumBid>" and price to reserve "<reservePrice>" and select the expiration date "<expiration>" .
     Then The response code is 400
     And The error message is "<errorMessage>"
