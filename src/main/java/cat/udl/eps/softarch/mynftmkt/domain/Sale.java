@@ -19,6 +19,6 @@ public class Sale extends UriEntity<Long> {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    @NotNull
+    //@NotNull
     private Bid bidSale;
 }
