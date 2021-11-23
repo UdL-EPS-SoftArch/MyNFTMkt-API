@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -40,7 +41,7 @@ public class User extends UriEntity<String> implements UserDetails {
     private String name;
 
     private String lastname;
-
+    @Min(0)
     private BigDecimal balance = BigDecimal.ZERO;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
