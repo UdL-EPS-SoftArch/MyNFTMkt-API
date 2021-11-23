@@ -54,16 +54,5 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       user.encodePassword();
       userRepository.save(user);
     }
-
-    Sale sale1 = new Sale();
-    ZonedDateTime now = ZonedDateTime.now();
-    sale1.setDateTime(now);
-    saleRepository.save(sale1);
-
-    Sale sale2 = new Sale();
-    sale2.setDateTime(now);
-    saleRepository.save(sale2);
-
-
   }
 }
