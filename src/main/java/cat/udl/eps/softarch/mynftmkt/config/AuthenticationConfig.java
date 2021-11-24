@@ -2,11 +2,14 @@ package cat.udl.eps.softarch.mynftmkt.config;
 
 import cat.udl.eps.softarch.mynftmkt.domain.*;
 import cat.udl.eps.softarch.mynftmkt.repository.AdminRepository;
+import cat.udl.eps.softarch.mynftmkt.repository.SaleRepository;
 import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+
+import java.time.ZonedDateTime;
 
 @Configuration
 public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
@@ -17,12 +20,14 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
   final BasicUserDetailsService basicUserDetailsService;
   final UserRepository userRepository;
   final AdminRepository adminRepository;
+  final SaleRepository saleRepository;
 
   public AuthenticationConfig(BasicUserDetailsService basicUserDetailsService, UserRepository userRepository,
-                              AdminRepository adminRepository) {
+                              AdminRepository adminRepository, SaleRepository saleRepository) {
     this.basicUserDetailsService = basicUserDetailsService;
     this.userRepository = userRepository;
     this.adminRepository = adminRepository;
+    this.saleRepository = saleRepository;
   }
 
   @Override
