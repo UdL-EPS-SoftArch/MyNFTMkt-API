@@ -34,14 +34,13 @@ public class NFTOwnerStepDefs {
 
     @And("It has been added a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to owned NFTs of user with the username {string}")
     public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String username) throws Exception {
-
-        String path = "/nFTs/" + newResourcesUri + "/owner";
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/nFTs/{id}/owner", newResourcesUri)
+                get("/nFTs/{id}/owner", 1)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.nFTs[0].uri/owner", is(username)));
+                .andExpect(jsonPath("$.owner", is(username)));
+
 
     }
 
@@ -50,11 +49,11 @@ public class NFTOwnerStepDefs {
 
         String path = "/nFTs/" + newResourcesUri + "/owner";
         stepDefs.result = stepDefs.mockMvc.perform(
-                        get("/nFTs/{id}/owner", newResourcesUri)
+                        get("/nFTs/1/owner", newResourcesUri)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.nFTs[0].uri/owner", is(user)));
+                .andExpect(jsonPath("$.nFTs[0].uri.owner", is(user)));
 
 
     }
@@ -83,6 +82,10 @@ public class NFTOwnerStepDefs {
             nft.setTitle(title);
             nftRepository.save(nft);
         }
+    }
+
+    @When("I remove the NFT with id {int} from the owned of user {string}")
+    public void iRemoveTheNFTWithIdFromTheOwnedOfUser(int arg0, String arg1) {
     }
 }
 

@@ -1,14 +1,17 @@
 package cat.udl.eps.softarch.mynftmkt.steps;
 
 import cat.udl.eps.softarch.mynftmkt.domain.NFT;
+import cat.udl.eps.softarch.mynftmkt.domain.User;
 import cat.udl.eps.softarch.mynftmkt.repository.NFTRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
@@ -26,6 +29,7 @@ public class RegisterNFTStepDef {
 
     final StepDefs stepDefs;
     final NFTRepository nftRepository;
+
     String newResourcesUri;
 
     public RegisterNFTStepDef(StepDefs stepDefs, NFTRepository nftRepository){
@@ -101,6 +105,17 @@ public class RegisterNFTStepDef {
 
         newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
+    }
+
+    @And("the author is {string}")
+    public void theAuthorIs(String user) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get(newResourcesUri + "/author")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._links.author.href", is(user)));
     }
 }
 
