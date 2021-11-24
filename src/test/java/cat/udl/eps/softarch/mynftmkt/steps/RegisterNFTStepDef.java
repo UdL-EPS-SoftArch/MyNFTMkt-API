@@ -115,7 +115,7 @@ public class RegisterNFTStepDef {
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._links.author.href", is(user)));
+                .andExpect(jsonPath("$.id", is(user)));
     }
 }
 
