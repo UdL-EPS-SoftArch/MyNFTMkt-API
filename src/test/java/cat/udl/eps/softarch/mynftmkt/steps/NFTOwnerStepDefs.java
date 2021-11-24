@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -35,11 +34,11 @@ public class NFTOwnerStepDefs {
     @And("It has been added a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} to owned NFTs of user with the username {string}")
     public void itHasBeenAddedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentToOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String username) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/nFTs/{id}/owner", 1)
+                get("/nFTs/{id}/owner", id)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
-                .andExpect(jsonPath("$.owner", is(username)));
+                .andExpect(jsonPath("$.id", is(username)));
 
 
     }
@@ -47,13 +46,7 @@ public class NFTOwnerStepDefs {
     @And("It has been removed a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} from owned NFTs of user with the username {string}")
     public void itHasBeenRemovedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentFromOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String user) throws Exception {
 
-        String path = "/nFTs/" + newResourcesUri + "/owner";
-        stepDefs.result = stepDefs.mockMvc.perform(
-                        get("/nFTs/1/owner", newResourcesUri)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.nFTs[0].uri.owner", is(user)));
+
 
 
     }
@@ -64,13 +57,11 @@ public class NFTOwnerStepDefs {
         nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
                         // patch better than put to update only one field
-                        put("/nFTs/{id}/owner", id, user)
+                        put("/nFTs/{id}/owner", id)
                                 .contentType("text/uri-list")
-                                .content(nft.get().getUri())
+                                .content(user)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
-        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
 
     }
 
@@ -84,8 +75,27 @@ public class NFTOwnerStepDefs {
         }
     }
 
-    @When("I remove the NFT with id {int} from the owned of user {string}")
-    public void iRemoveTheNFTWithIdFromTheOwnedOfUser(int arg0, String arg1) {
+    @When("I change the owner of NFT with id {int} to user {string}")
+    public void iChangeTheOwnerOfNFTWithIdToUser(long id, String newUser) throws Exception {
+        Optional<NFT> nft = nftRepository.findById(id);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        patch("/nFTs/{id}/owner", id)
+                                .contentType("text/uri-list")
+                                .content(newUser)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+    }
+
+    @And("NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} now has owner {string}")
+    public void nftWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentNowHasOwner(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String newUser) throws Exception {
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/nFTs/{id}/owner", id)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(newUser)));
     }
 }
 

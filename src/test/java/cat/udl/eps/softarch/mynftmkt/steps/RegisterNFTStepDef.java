@@ -102,9 +102,6 @@ public class RegisterNFTStepDef {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate())
         ).andDo(print());
-
-        newResourcesUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
-
     }
 
     @And("the author is {string}")

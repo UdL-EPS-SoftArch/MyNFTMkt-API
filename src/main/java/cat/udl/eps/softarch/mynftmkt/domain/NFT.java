@@ -33,10 +33,12 @@ public class NFT extends UriEntity<Long>{
     private String content;
 
     @ManyToOne
+    @NotBlank
     @JsonIdentityReference(alwaysAsId = true)
     private User author;
 
     @ManyToOne
+    @NotBlank
     @JsonIdentityReference(alwaysAsId = true)
     private User owner;
 
