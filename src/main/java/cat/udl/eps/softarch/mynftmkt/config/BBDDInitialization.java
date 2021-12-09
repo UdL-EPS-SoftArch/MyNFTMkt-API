@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Set;
 
 @Configuration
 @Profile("test")
@@ -100,6 +101,11 @@ public class BBDDInitialization {
             sale.setBidSale(bid);
             sale.setDateTime(purchaseDate);
             this.saleRepository.save(sale);
+
+            Set<NFT> favoriteNFTs = user.getFavoriteNFTs();
+            favoriteNFTs.add(nft);
+            user.setFavoriteNFTs(favoriteNFTs);
+            this.userRepository.save(user);
         }
     }
 }
