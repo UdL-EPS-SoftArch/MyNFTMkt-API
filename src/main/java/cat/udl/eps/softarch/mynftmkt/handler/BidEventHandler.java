@@ -65,7 +65,7 @@ public class BidEventHandler {
 
     @HandleAfterCreate
     public void handleBidPostCreate(Bid bid) {
-        logger.info("After creating: {}", bid.toString());
+        //logger.info("After creating: {}", bid.toString());
         ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
         bid.setDateTime(date);
         if (bid.getOffer() instanceof FixedPriceOffer){
