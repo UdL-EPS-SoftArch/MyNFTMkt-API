@@ -72,7 +72,7 @@ public class NFTOwnerStepDefs {
     public void iChangeTheOwnerOfNFTWithIdToUser(long id, String newUser) throws Exception {
         Optional<NFT> nft = nftRepository.findById(id);
         stepDefs.result = stepDefs.mockMvc.perform(
-                        patch("/nFTs/{id}/owner", id)
+                        put("/nFTs/{id}/owner", id)
                                 .contentType("text/uri-list")
                                 .content("/users/" + newUser)
                                 .with(AuthenticationStepDefs.authenticate()))
