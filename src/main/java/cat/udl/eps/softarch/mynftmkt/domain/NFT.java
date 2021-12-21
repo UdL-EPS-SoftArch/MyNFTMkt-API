@@ -18,7 +18,6 @@ public class NFT extends UriEntity<Long>{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
     private String title;
 
     private String description;
@@ -33,12 +32,10 @@ public class NFT extends UriEntity<Long>{
     private String content;
 
     @ManyToOne
-    @NotBlank
     @JsonIdentityReference(alwaysAsId = true)
     private User author;
 
     @ManyToOne
-    @NotBlank
     @JsonIdentityReference(alwaysAsId = true)
     private User owner;
 

@@ -4,6 +4,7 @@ Feature: NFT Owner
 
   Background:
     Given There is a registered user with username "user" and password "password" and email "user@sample.app"
+    Given There is a registered user with username "newUser" and password "password" and email "newUser@sample.app"
     Given There is a registered NFT with id 1, title "title", description "description", keywords "tag1, tag2, tag3", category "category", mediaType "mediaType" and content "content"
 
   Scenario: Add owned NFT to an existing user

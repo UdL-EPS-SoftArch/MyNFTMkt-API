@@ -43,13 +43,6 @@ public class NFTOwnerStepDefs {
 
     }
 
-    @And("It has been removed a NFT with id {int}, title {string}, description {string}, keywords {string}, category {string}, mediaType {string} and content {string} from owned NFTs of user with the username {string}")
-    public void itHasBeenRemovedANFTWithIdTitleDescriptionKeywordsCategoryMediaTypeAndContentFromOwnedNFTsOfUserWithTheUsername(long id, String arg1, String arg2, String arg3, String arg4, String arg5, String arg6, String user) throws Exception {
-
-
-
-
-    }
 
     @When("I add the NFT with id {int} to the owned by user {string}")
     public void iAddTheNFTWithIdToTheOwnedByUser(long id, String user) throws Exception {
@@ -59,7 +52,7 @@ public class NFTOwnerStepDefs {
                         // patch better than put to update only one field
                         put("/nFTs/{id}/owner", id)
                                 .contentType("text/uri-list")
-                                .content(user)
+                                .content("/users/" + user)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
@@ -81,7 +74,7 @@ public class NFTOwnerStepDefs {
         stepDefs.result = stepDefs.mockMvc.perform(
                         patch("/nFTs/{id}/owner", id)
                                 .contentType("text/uri-list")
-                                .content(newUser)
+                                .content("/users/" + newUser)
                                 .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
