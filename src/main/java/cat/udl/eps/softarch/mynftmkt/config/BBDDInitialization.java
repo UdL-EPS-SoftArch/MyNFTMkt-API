@@ -52,7 +52,7 @@ public class BBDDInitialization {
             admin.setUsername("admin");
             admin.setPassword(defaultPassword);
             admin.encodePassword();
-            userRepository.save(admin);
+            admin = userRepository.save(admin);
         }
 
         // Sample User
@@ -62,7 +62,7 @@ public class BBDDInitialization {
             user.setUsername("user");
             user.setPassword(defaultPassword);
             user.encodePassword();
-            userRepository.save(user);
+            user = userRepository.save(user);
         }
         //If the database is empty
         if(nftRepository.count() == 0) {
@@ -71,7 +71,7 @@ public class BBDDInitialization {
             user2.setUsername("user2");
             user2.setPassword(defaultPassword);
             user2.encodePassword();
-            userRepository.save(user2);
+            user2 = userRepository.save(user2);
 
             NFT nft = new NFT();
             nft.setTitle("Test NFT");
@@ -79,13 +79,13 @@ public class BBDDInitialization {
             nft.setContent("An NFT has some content");
             nft.setCategory("This is the category for the NFT");
             nft.setKeywords(Arrays.asList("Keyword1", "Keyword2"));
-            // nft.setOwner(user);
-            nftRepository.save(nft);
+            nft.setOwner(user);
+            nft = nftRepository.save(nft);
 
             FixedPriceOffer fixedPriceOffer = new FixedPriceOffer();
             fixedPriceOffer.setNft(nft);
             fixedPriceOffer.setPrice(BigDecimal.TEN);
-            this.offerRepository.save(fixedPriceOffer);
+            fixedPriceOffer = this.offerRepository.save(fixedPriceOffer);
 
             ZonedDateTime purchaseDate = ZonedDateTime.of(2021, 10, 8, 10, 53,
                     0, 0, ZoneId.systemDefault());
@@ -95,17 +95,17 @@ public class BBDDInitialization {
             bid.setPrice(BigDecimal.TEN);
             bid.setStatus(Bid.StatusTypes.PURCHASED);
             bid.setDateTime(purchaseDate);
-            this.bidRepository.save(bid);
+            bid = this.bidRepository.save(bid);
 
             Sale sale = new Sale();
             sale.setBidSale(bid);
             sale.setDateTime(purchaseDate);
-            this.saleRepository.save(sale);
+            sale = this.saleRepository.save(sale);
 
             Set<NFT> favoriteNFTs = user.getFavoriteNFTs();
             favoriteNFTs.add(nft);
             user.setFavoriteNFTs(favoriteNFTs);
-            this.userRepository.save(user);
+            user = this.userRepository.save(user);
         }
     }
 }
