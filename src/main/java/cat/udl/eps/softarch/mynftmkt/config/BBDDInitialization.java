@@ -76,7 +76,7 @@ public class BBDDInitialization {
             NFT nft = new NFT();
             nft.setTitle("Test NFT");
             nft.setDescription("This is the NFT for testing purposes");
-            nft.setContent("An NFT has some content");
+            nft.setContent("https://lh3.googleusercontent.com/ujepnqpnL0nDQIHsWxlCXzyw4pf01yjz1Jmb4kAQHumJAPrSEj0-e3ABMZlZ1HEpJoqwOcY_kgnuJGzfXbd2Tijri66GXUtfN2MXQA=w600");
             nft.setCategory("This is the category for the NFT");
             nft.setKeywords(Arrays.asList("Keyword1", "Keyword2"));
             nft.setOwner(user);
