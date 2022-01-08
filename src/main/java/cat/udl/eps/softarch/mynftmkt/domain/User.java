@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
@@ -18,7 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "AcademicRecruitUser") //Avoid collision with system table User in Postgres
@@ -39,8 +43,8 @@ public class User extends UriEntity<String> implements UserDetails {
     private String name;
 
     private String lastname;
-
-    private BigDecimal balance;
+    @Min(0)
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
@@ -61,7 +65,7 @@ public class User extends UriEntity<String> implements UserDetails {
     private Boolean darkMode;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<NFT> favoriteNFTs;
+    private Set<NFT> favoriteNFTs = new HashSet<>();
 
     @Override
     public String getId() {

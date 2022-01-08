@@ -41,6 +41,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
                 .antMatchers(HttpMethod.POST, "/offers").denyAll()
 
                 .antMatchers(HttpMethod.DELETE, "/bids/*").denyAll()
+                .antMatchers(HttpMethod.PATCH, "/bids/*").denyAll()
+                .antMatchers(HttpMethod.PUT, "/bids/*").denyAll()
+
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()

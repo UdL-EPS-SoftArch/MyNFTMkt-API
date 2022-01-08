@@ -27,7 +27,7 @@ jobs:
           CUCUMBER_PUBLISH_ENABLED: true
       - name: Build, Push and Deploy to Heroku
         if: ${{ github.event_name == 'push' }}
-        uses: jctaveras/heroku-deploy@v2.1.1  # use the latest version of the action
+        uses: jctaveras/heroku-deploy@v2.1.3
         with:
           email: ${{ secrets.HEROKU_EMAIL }}
           api_key: ${{ secrets.HEROKU_API_KEY }}

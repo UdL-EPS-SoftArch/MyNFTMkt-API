@@ -6,6 +6,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
         import cat.udl.eps.softarch.mynftmkt.repository.UserRepository;
         import io.cucumber.java.en.And;
         import io.cucumber.java.en.Given;
+        import io.cucumber.java.en.Then;
         import io.cucumber.java.en.When;
         import org.json.JSONObject;
         import org.springframework.http.MediaType;
@@ -19,8 +20,7 @@ package cat.udl.eps.softarch.mynftmkt.steps;
         import java.util.List;
         import java.util.Optional;
 
-        import static org.hamcrest.Matchers.contains;
-        import static org.hamcrest.Matchers.is;
+        import static org.hamcrest.Matchers.*;
         import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
         import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -117,5 +117,15 @@ public class FavoriteNFTStepDefs {
                 .andDo(print())
                 .andExpect(jsonPath("$._embedded.nFTs[0].uri", is(path2)))
                 .andExpect(jsonPath("$._embedded.nFTs[1].uri", is(path1)));
+    }
+
+    @Then("The size of the list of user {string} is {int}")
+    public void theSizeOfTheListOfUserIs(String username, int size) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                        get("/users/{username}/favoriteNFTs", username)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$._embedded.nFTs", hasSize(size)));
     }
 }
