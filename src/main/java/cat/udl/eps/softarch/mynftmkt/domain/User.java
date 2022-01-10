@@ -11,6 +11,7 @@ import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -27,7 +28,7 @@ import java.util.Set;
 @Entity
 @Table(name = "AcademicRecruitUser") //Avoid collision with system table User in Postgres
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "favoriteNFTs")
 public class User extends UriEntity<String> implements UserDetails {
 
     public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -64,6 +65,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
     private Boolean darkMode;
 
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<NFT> favoriteNFTs = new HashSet<>();
 
