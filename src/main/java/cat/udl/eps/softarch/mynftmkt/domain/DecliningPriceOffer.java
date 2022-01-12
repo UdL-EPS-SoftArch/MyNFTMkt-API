@@ -3,7 +3,11 @@ package cat.udl.eps.softarch.mynftmkt.domain;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Entity
 public class DecliningPriceOffer extends Offer{
@@ -30,7 +34,13 @@ public class DecliningPriceOffer extends Offer{
     public ZonedDateTime getExpiration() {
         return expiration;
     }
-    public void setExpiration(ZonedDateTime expiration) {
-        this.expiration = expiration;
+
+    public void setExpiration(LocalDateTime expiration) {
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+        ZoneId timeZone = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = LocalDateTime.parse(df.format(expiration), df).atZone(timeZone);
+        this.expiration = zonedDateTime;
+
     }
 }
