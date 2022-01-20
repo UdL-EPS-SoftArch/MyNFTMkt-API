@@ -25,82 +25,78 @@ import java.util.zip.DataFormatException;
 @RepositoryEventHandler
 public class HighestBidOfferEventHandler {
 
-        final Logger logger = LoggerFactory.getLogger(Bid.class);
+    final Logger logger = LoggerFactory.getLogger(Bid.class);
 
 
-        final HighestBidOfferRepository highestBidOfferRepository;
+    final HighestBidOfferRepository highestBidOfferRepository;
 
-        public HighestBidOfferEventHandler(HighestBidOfferRepository highestBidOfferRepository ) {
-            this.highestBidOfferRepository = highestBidOfferRepository;
+    public HighestBidOfferEventHandler(HighestBidOfferRepository highestBidOfferRepository) {
+        this.highestBidOfferRepository = highestBidOfferRepository;
 
+    }
+
+    @HandleBeforeCreate
+    public void handleHighestBidOfferPreCreate(HighestBidOffer highestBidOffer) {
+
+
+        if ((highestBidOffer.getReservePrice().compareTo(highestBidOffer.getMinimumBid()) <= 0) && (highestBidOffer.getReservePrice().compareTo(new BigDecimal("0.01")) >= 0 && highestBidOffer.getMinimumBid().compareTo(new BigDecimal("0.01")) >= 0)) {
+            throw new ReserverPriceException();
         }
 
-        @HandleBeforeCreate
-        public void handleHighestBidOfferPreCreate(HighestBidOffer highestBidOffer) {
+        LocalDate currentData = LocalDate.now();
 
-
-            if( ( highestBidOffer.getReservePrice().compareTo(highestBidOffer.getMinimumBid()) <= 0 ) && (highestBidOffer.getReservePrice().compareTo(new BigDecimal("0.01")) >= 0  && highestBidOffer.getMinimumBid().compareTo(new BigDecimal("0.01")) >= 0 ) ){
-                throw new ReserverPriceException();
-            }
-
-            LocalDate currentData = LocalDate.now();
-
-            if(highestBidOffer.getExpiration().compareTo(currentData) < 0){
-                throw new LowerDataException();
-            }
-
-            ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
-            highestBidOffer.setDateTime(date);
-
-
-
-
-
-
+        if (highestBidOffer.getExpiration().compareTo(currentData) < 0) {
+            throw new LowerDataException();
         }
 
-        @HandleBeforeSave
-        public void handleHighestBidOfferPreSave(HighestBidOffer highestBidOffer) {
-            if( ( highestBidOffer.getReservePrice().compareTo(highestBidOffer.getMinimumBid()) <= 0 ) && (highestBidOffer.getReservePrice().compareTo(new BigDecimal("0.01")) >= 0  && highestBidOffer.getMinimumBid().compareTo(new BigDecimal("0.01")) >= 0 ) ){
-                throw new ReserverPriceException();
-            }
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+        highestBidOffer.setDateTime(date);
 
-            LocalDate currentData = LocalDate.now();
 
-            if(highestBidOffer.getExpiration().compareTo(currentData) < 0){
-                throw new LowerDataException();
-            }
+    }
+
+    @HandleBeforeSave
+    public void handleHighestBidOfferPreSave(HighestBidOffer highestBidOffer) {
+        if ((highestBidOffer.getReservePrice().compareTo(highestBidOffer.getMinimumBid()) <= 0) && (highestBidOffer.getReservePrice().compareTo(new BigDecimal("0.01")) >= 0 && highestBidOffer.getMinimumBid().compareTo(new BigDecimal("0.01")) >= 0)) {
+            throw new ReserverPriceException();
         }
 
-        @HandleBeforeDelete
-        public void handleHighestBidOfferPreDelete(HighestBidOffer highestBidOffer) {
-            logger.info("Before deleting: {}", highestBidOffer.toString());
-        }
+        LocalDate currentData = LocalDate.now();
 
-        @HandleBeforeLinkSave
-        public void handleHighestBidOfferPreLinkSave(HighestBidOffer highestBidOffer, Object o) {
-            logger.info("Before linking: {} to {}", highestBidOffer.toString(), o.toString());
+        if (highestBidOffer.getExpiration().compareTo(currentData) < 0) {
+            throw new LowerDataException();
         }
+    }
 
-        @HandleAfterCreate
-        public void handleHighestBidOfferPostCreate(HighestBidOffer highestBidOffer) {
-            logger.info("After creating: {}", highestBidOffer.toString());
-        }
+    @HandleBeforeDelete
+    public void handleHighestBidOfferPreDelete(HighestBidOffer highestBidOffer) {
+        logger.info("Before deleting: {}", highestBidOffer.toString());
+    }
 
-        @HandleAfterSave
-        public void handleHighestBidOfferPostSave(HighestBidOffer highestBidOffer) {
-            logger.info("After updating: {}", highestBidOffer.toString());
-        }
+    @HandleBeforeLinkSave
+    public void handleHighestBidOfferPreLinkSave(HighestBidOffer highestBidOffer, Object o) {
+        logger.info("Before linking: {} to {}", highestBidOffer.toString(), o.toString());
+    }
 
-        @HandleAfterDelete
-        public void handleHighestBidOfferPostDelete(HighestBidOffer highestBidOffer) {
-            logger.info("After deleting: {}", highestBidOffer.toString());
-        }
+    @HandleAfterCreate
+    public void handleHighestBidOfferPostCreate(HighestBidOffer highestBidOffer) {
+        logger.info("After creating: {}", highestBidOffer.toString());
+    }
 
-        @HandleAfterLinkSave
-        public void handleHighestBidOfferPostLinkSave(HighestBidOffer highestBidOffer, Object o) {
-            logger.info("After linking: {} to {}", highestBidOffer.toString(), o.toString());
-        }
+    @HandleAfterSave
+    public void handleHighestBidOfferPostSave(HighestBidOffer highestBidOffer) {
+        logger.info("After updating: {}", highestBidOffer.toString());
+    }
+
+    @HandleAfterDelete
+    public void handleHighestBidOfferPostDelete(HighestBidOffer highestBidOffer) {
+        logger.info("After deleting: {}", highestBidOffer.toString());
+    }
+
+    @HandleAfterLinkSave
+    public void handleHighestBidOfferPostLinkSave(HighestBidOffer highestBidOffer, Object o) {
+        logger.info("After linking: {} to {}", highestBidOffer.toString(), o.toString());
+    }
 
 
 }

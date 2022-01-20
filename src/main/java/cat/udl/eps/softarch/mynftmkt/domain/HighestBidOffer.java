@@ -14,8 +14,10 @@ public class HighestBidOffer extends Offer {
 
     @DecimalMin("0.01")
     private BigDecimal minimumBid;
+
     @DecimalMin("0.01")
     private BigDecimal reservePrice;
+
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate expiration;
 

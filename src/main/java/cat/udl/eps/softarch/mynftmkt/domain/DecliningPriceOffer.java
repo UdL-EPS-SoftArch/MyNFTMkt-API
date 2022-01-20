@@ -33,4 +33,11 @@ public class DecliningPriceOffer extends Offer{
     public void setExpiration(ZonedDateTime expiration) {
         this.expiration = expiration;
     }
+
+    public BigDecimal getPrice(){
+        //float m = (endingPrice.floatValue() - startingPrice.floatValue() / (this.getExpiration().getMinute() -  this.getDateTime().getMinute()));
+        //retrun m * ZonedDateTime.now().getMinute() +
+        //TODO
+        return new BigDecimal(0);
+    }
 }
